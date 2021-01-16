@@ -7,6 +7,6 @@ include_once('./scripts/routes.scr.php');
 
 
 
-if (in_array($_GET['url'], Routes::$validpaths) == false) {
+if (in_array($uri, Routes::$validpaths) == false) {
     header('location: ./404');
 }

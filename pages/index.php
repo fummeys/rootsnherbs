@@ -1,24 +1,21 @@
 <?php
-$user = new ControllerUser;
-// print_r($user->getAllusers());
-?>
+    include 'layouts/top.php';
+    ?>
+      
+    <!-- Start your project here-->
+    <?php
+    
+    include 'layouts/header.php';
+    ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index</title>
-</head>
-<body>
-    <header>
+<h> Hello World </h>
 
-    </header>
-    <main>
-
-    </main><h1>this is index page</h1>
-    <footer>
-
-    </footer>
-</body>
-</html>
+    <?php
+    include 'layouts/footer.php';
+    ?>
+    
+    <!-- End your project here-->
+ 
+    <?php
+    include 'layouts/bottom.php';
+    ?>
