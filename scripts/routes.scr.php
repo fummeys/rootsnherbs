@@ -14,3 +14,13 @@ Routes::set('index', function(){
 Routes::set('404', function(){
     ControllerRoutes::RenderPage('404');
 });
+
+
+Routes::set('login', function(){
+    ControllerRoutes::RenderPage('login');
+});
+
+
+Routes::set('register', function(){
+    ControllerRoutes::RenderPage('register');
+});

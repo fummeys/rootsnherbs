@@ -6,12 +6,13 @@
 // $dbname ="";
 
 //request uri
-    $uri = $_SERVER["REQUEST_URI"];
+    // $uri = $_SERVER["REQUEST_URI"];
+    $uri = $_GET['url'];
 
 // dbconfiguration offline
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname ="castle";
+    $dbname ="marketing";
 // dbconnection
 $conn = new mysqli($servername, $username, $password, $dbname);
