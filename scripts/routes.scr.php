@@ -6,9 +6,7 @@ Routes::set('', function(){
 Routes::set('/', function(){
     ControllerRoutes::RenderPage('login');
 });
-Routes::set('/table', function(){
-    ControllerRoutes::RenderPage('table');
-});
+
 
 Routes::set('index.php', function(){
     ControllerRoutes::RenderPage('index');
