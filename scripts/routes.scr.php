@@ -1,10 +1,13 @@
 <?php
 
 Routes::set('', function(){
-    ControllerRoutes::RenderPage('index');
+    ControllerRoutes::RenderPage('login');
 });
 Routes::set('/', function(){
-    ControllerRoutes::RenderPage('index');
+    ControllerRoutes::RenderPage('login');
+});
+Routes::set('/table', function(){
+    ControllerRoutes::RenderPage('table');
 });
 
 Routes::set('index.php', function(){
@@ -15,6 +18,9 @@ Routes::set('/login.php', function(){
 });
 Routes::set('/profile.php', function(){
     ControllerRoutes::RenderPage('profile');
+});
+Routes::set('/registeradmin.php', function(){
+    ControllerRoutes::RenderPage('registeradmin');
 });
 Routes::set('/register.php', function(){
     ControllerRoutes::RenderPage('register');

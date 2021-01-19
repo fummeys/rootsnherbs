@@ -1,3 +1,57 @@
+<?php
+session_start();
+include_once('./models/ProductsModel.php');
+include_once('./models/ManagersModel.php');
+
+if(isset( $_POST['submit_1']) ) {
+
+if(isset($_POST['productname'])){
+    $productname = $_POST['productname'];
+    }
+    if(isset($_POST['bronzevalue'])){
+    $bronzevalue = $_POST['bronzevalue'];
+    }
+    if(isset($_POST['description'])){
+    $description = $_POST['description'];
+    }
+    if(!empty($productname)&&!empty($bronzevalue)&&!empty($description)){
+        
+        $play = new ProductsModel();
+        if($play->addProduct($productname,$bronzevalue,$description)==TRUE){
+            
+            //header('location: login.php');
+            $mssg = " Product added";
+        }else{
+            $mssg = " Something went wrong, could not add products";
+        }
+    }
+   
+
+}
+if(isset($_POST['submit_2'])) {
+    
+  if(isset($_POST['uid'])){
+    $id = $_POST['uid'];
+    
+    }
+    if(isset($_POST['urole'])){
+    $role = $_POST['urole'];
+    
+    }
+    if(!empty($id)&&!empty($role)){
+           $play1 = new ManagersModel();
+        if($play1->updateRolebyID($id,$role)==TRUE){
+            
+            $mssg1 = "Role updated";
+        }else{
+            $mssg1 = " Something went wrong, could not update role";
+        }
+    }
+  
+
+}
+
+?>
 <!DOCTYPE html>
 <html>
 
@@ -119,7 +173,7 @@
                             </li>
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow" role="presentation">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small">Valerie Luna</span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small"><?php echo $_SESSION["user"]; ?></span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
                                     <div
                                         class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu"><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a>
                                         <a
@@ -167,36 +221,46 @@
                             <div class="card-body">
                                 <h4 class="card-title">Bronze Value &amp; Product</h4>
                                 <h6 class="text-muted card-subtitle mb-2">Assign BV to product</h6>
-                                <div class="input-group">
-                                    <div class="input-group-prepend"><span class="input-group-text">Product Name</span></div><input class="form-control" type="text">
+                                <form method = "POST">                                <div class="input-group">
+                                    <div class="input-group-prepend"><span class="input-group-text">Product Name</span></div><input class="form-control" type="text" name = "productname">
                                     <div class="input-group-append"></div>
                                 </div>
                                 <div class="input-group">
-                                    <div class="input-group-prepend"><span class="input-group-text">Bronze Value</span></div><input class="form-control" type="text">
+                                    <div class="input-group-prepend"><span class="input-group-text">Bronze Value</span></div><input class="form-control" type="text" name = "bronzevalue">
                                     <div class="input-group-append"></div>
                                 </div>
                                 <div class="input-group">
-                                    <div class="input-group-prepend"><span class="input-group-text">Description</span></div><input class="form-control" type="text">
-                                    <div class="input-group-append"><button class="btn btn-primary" type="button">Go!</button></div>
+                                    <div class="input-group-prepend"><span class="input-group-text">Description</span></div><input class="form-control" type="text" name = "description">
+                                    <div class="input-group-append"><input class="btn btn-primary" type="submit" name = "submit_1" value = "Go!"></div>
                                 </div>
+                                <?php if(!empty($mssg)){
+                                    echo '<div class="text-center" style="color:green">'.$mssg.'</div>';
+                                    } ?>
+                                </form>
                             </div>
                             <div class="card-body">
                                 <h4 class="card-title">Users and Roles</h4>
                                 <h6 class="text-muted card-subtitle mb-2">Assign role to user</h6>
+                                <form method = "POST">
                                 <div class="input-group">
-                                    <div class="input-group-prepend"><span class="input-group-text">userID</span></div><input class="form-control" type="text">
+                                    <div class="input-group-prepend"><span class="input-group-text">userID</span></div><input class="form-control" type="text" name = "uid">
                                     <div class="input-group-append"></div>
-                                </div><form class="form-inline">
+                                </div>
   <div class="form-group">
     <label >Role: </label>
-     <select  class="form-control" >
-         <option>User</option>
-         <option>Admin</option>
-         <option>SuperAdmin</option>
+     <select name = "urole" class="form-control" >
+         <option  value ="3">User</option>
+         <option  value ="4">Admin</option>
+         <option value ="5">SuperAdmin</option>
          
       </select>
+
   </div>
-</form><button class="btn btn-primary" type="button">Go!</button>
+  <input class="btn btn-primary" type="submit" name = "submit_2" value = "GO!"> </form>
+
+<?php if(!empty($mssg1)){
+                                    echo '<div class="text-center" style="color:green">'.$mssg1.'</div>';
+                                    } ?>
                                 <div class="input-group">
                                     <div class="input-group-prepend"></div>
                                     <div class="input-group-append"></div>

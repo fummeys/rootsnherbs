@@ -137,16 +137,49 @@
                         <div class="card-body">
                             <h4 class="card-title">Give Bronze value</h4>
                             <h6 class="text-muted card-subtitle mb-2">Assign BV to user</h6>
+                            <form>
+        <div>
+        <label >Products: </label>
+        <select name = "product" id = "product" class="form-control" >
+        <?php
+        include_once('./models/ProductsModel.php');
+        $products = new ProductsModel();
+        $myp = $products->getAllProducts();
+        //$productlist = $myp->fetch_assoc();
+        while ($row =  $myp->fetch_assoc()) { 
+            echo "<option  value ='".$row['bronzevalue']."'>".$row['productname']."</option>";
+       } 
+        
+        
+        ?>
+        </select>
+      </div>
+    	<input type="button" class="add-row" value="Add Product">
+    </form>
+    <table class="table my-0" id="dataTable">
+        <thead>
+            <tr>
+                <th>Select</th>
+                <th>Products</th>
+                <th>BV</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+    <button type="button" class="delete-row">Delete Row</button>
+  <button type="button" class="show">Use Products to assign value</button>
                             <div class="input-group">
-                                <div class="input-group-prepend"><span class="input-group-text">Name</span></div><input class="form-control" type="text">
+                                <div class="input-group-prepend"><span class="input-group-text">User ID</span></div><input class="form-control" type="text">
                                 <div class="input-group-append"></div>
                             </div>
                             <div class="input-group">
-                                <div class="input-group-prepend"><span class="input-group-text">Bronze Value</span></div><input class="form-control" type="text">
+                                <div class="input-group-prepend"><span class="input-group-text">Bronze Value</span></div><input class="form-control" id = "usebv" type="text">
                                 <div class="input-group-append"></div>
                             </div>
                             <div class="input-group">
-                                <div class="input-group-prepend"><span class="input-group-text">Description</span></div><input class="form-control" type="text">
+                                <div class="input-group-prepend"><span class="input-group-text">Description</span></div><input class="form-control" id = "usedesc" type="text">
                                 <div class="input-group-append"><button class="btn btn-primary" type="button">Go!</button></div>
                             </div>
                         </div>
@@ -239,6 +272,46 @@
     <script src="assets/js/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="assets/js/script.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <script>
+    $(document).ready(function(){
+        $(".add-row").click(function(){
+            var name = $("#product").find('option:selected').text();
+            var val = $("#product").val();
+            
+            var markup = "<tr><td><input type='checkbox' name='record'></td><td class = 'desc' >" + name + "</td><td class = 'bv'>" + val + "</td></tr>";
+            $("table tbody:first").append(markup);
+        });
+        
+        // Find and remove selected table rows
+        $(".delete-row").click(function(){
+            $("table tbody:first").find('input[name="record"]').each(function(){
+            	if($(this).is(":checked")){
+                    $(this).parents("tr").remove();
+                }
+            });
+        });
+    });
+       $(".show").click(function(){
+         var content = 0;
+            $("table tbody:first").find(".bv").each(function(){
+            	
+                    content += Number($(this).text());
+                
+            });
+            $("#usebv").val(content);
+            var content1 = "";
+            $("table tbody:first").find(".desc").each(function(){
+            	
+                    content1 += $(this).text()+' |';
+                
+            });
+            $("#usedesc").val(content1);
+          
+        });
+        
+</script>
 </body>
 
 </html>
