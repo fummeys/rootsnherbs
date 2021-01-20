@@ -1,3 +1,26 @@
+<?php
+session_start();
+include_once('./models/BonusesModel.php');
+
+if (!isset($_POST['page'])){
+    $page = 1;  
+} else {  
+    $page = $_POST['page'];  
+}  
+
+$results_per_page = 10;  
+$page_first_result = ($page-1) * $results_per_page;  
+
+$page_first_result = ($page-1) * $results_per_page;
+$bonuses = new BonusesModel();
+$result = $bonuses-> getAllBonuses();
+$number_of_result = mysqli_num_rows($result);  
+$somebonuses = $bonuses->getSomeBonuses($page_first_result,$results_per_page);
+//determine the total number of pages available  
+$number_of_page = ceil ($number_of_result / $results_per_page);
+
+
+?>
 <!DOCTYPE html>
 <html>
 
@@ -162,37 +185,27 @@
                                         <th>Description</th>
                                         <th>Bonus Type</th>
                                         <th>Date</th>
-                                        <th>Issuer</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg">Airi Satou</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>33</td>
-                                        <td>2008/11/28</td>
-                                        <td>$162,700</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg">Airi Satou</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>33</td>
-                                        <td>2008/11/28</td>
-                                        <td>$162,700</td>
-                                    </tr>
-                                   
+                                <?php
+                                        while ($row = mysqli_fetch_array($somebonuses)) { 
+        echo "<tr><td>".$row['id']."</td>";
+        echo "<td>".$row['name']."</td>"; 
+        echo "<td>".$row['userid']."</td>";  
+        echo "<td>".$row['transactionid']."</td>";  
+        echo "<td>".$row['description']."</td>";  
+        echo "<td>".$row['bonustype']."</td>";  
+        echo "<td>".$row['time']."</td></tr>";  
+
+          
+        
+           }  
+            ?>
                                 </tbody>
                                 <tfoot>
-                                    <tr>
-                                        <td><strong>Name</strong></td>
-                                        <td><strong>Position</strong></td>
-                                        <td><strong>Office</strong></td>
-                                        <td><strong>Age</strong></td>
-                                        <td><strong>Start date</strong></td>
-                                        <td><strong>Salary</strong></td>
-                                    </tr>
+                                   
                                 </tfoot>
                             </table>
                         </div>
@@ -201,15 +214,22 @@
                                 <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
                             </div>
                             <div class="col-md-6">
-                                <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
-                                    <ul class="pagination">
-                                        <li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
-                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
-                                    </ul>
-                                </nav>
+                            <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                        <ul class="pagination">
+                                            <form method = "POST">
+                                            <select name = "page" class="form-control" >
+         
+         
+         
+                                            <?php
+                                            for($page = 1; $page<= $number_of_page; $page++) {  
+    echo '<option value ="'.$page.'">' . $page . ' </option>'; } 
+    ?>
+    </select>
+    <input class="btn btn-primary" type="submit" name = "submit_1" value = "Go!">
+                                                        </form>
+                                            
+                                    </nav>
                             </div>
                         </div>
                     </div>

@@ -3,6 +3,44 @@ session_start();
 include_once('./models/ProductsModel.php');
 include_once('./models/ManagersModel.php');
 
+
+
+if (!isset($_POST['page'])){
+    $page = 1;  
+} else {  
+    $page = $_POST['page'];  
+}  
+
+$results_per_page = 10;  
+$page_first_result = ($page-1) * $results_per_page;  
+
+$page_first_result = ($page-1) * $results_per_page;
+$managers = new ManagersModel();
+$result = $managers-> getAllManagers();
+$number_of_result = mysqli_num_rows($result);  
+$somemanagers = $managers->getSomeManagers($page_first_result,$results_per_page);
+//determine the total number of pages available  
+$number_of_page = ceil ($number_of_result / $results_per_page);
+
+if (!isset($_POST['ppage'])){
+    $ppage = 1;  
+} else {  
+    $ppage = $_POST['ppage'];  
+}  
+
+$presults_per_page = 5;  
+$ppage_first_result = ($ppage-1) * $presults_per_page;  
+
+$ppage_first_result = ($ppage-1) * $presults_per_page;
+$products = new ProductsModel();
+$presult = $products-> getAllProducts();
+$pnumber_of_result = mysqli_num_rows($presult);  
+$someproducts = $products->getSomeProducts($ppage_first_result,$presults_per_page);
+//determine the total number of pages available  
+$pnumber_of_page = ceil ($pnumber_of_result / $presults_per_page);
+
+
+
 if(isset( $_POST['submit_1']) ) {
 
 if(isset($_POST['productname'])){
@@ -196,6 +234,7 @@ if(isset($_POST['submit_2'])) {
                                         <div class="text-uppercase text-primary font-weight-bold text-xs mb-1"><span>PRODUCTS AND BRONZE VALUE</span></div>
                                         <div class="text-dark font-weight-bold h5 mb-0"></div>
                                     </div>
+                                    
                                     <div class="col-auto"><i class="fas fa-calendar fa-2x text-gray-300"></i></div>
                                 </div>
                             </div>
@@ -272,18 +311,53 @@ if(isset($_POST['submit_2'])) {
                         <div class="card shadow mb-4">
                             <div class="card-header d-flex justify-content-between align-items-center">
                                 <h6 class="text-primary font-weight-bold m-0">Products and&nbsp; BVs</h6>
-                                <div class="dropdown no-arrow"><button class="btn btn-link btn-sm dropdown-toggle" data-toggle="dropdown" aria-expanded="false" type="button"><i class="fas fa-ellipsis-v text-gray-400"></i></button>
-                                    <div class="dropdown-menu shadow dropdown-menu-right animated--fade-in"
-                                        role="menu">
-                                        <p class="text-center dropdown-header">dropdown header:</p><a class="dropdown-item" role="presentation" href="#">&nbsp;Action</a><a class="dropdown-item" role="presentation" href="#">&nbsp;Another action</a>
-                                        <div class="dropdown-divider"></div><a class="dropdown-item" role="presentation" href="#">&nbsp;Something else here</a></div>
-                                </div>
+                                
                             </div>
                             <div class="card-body">
-                                <div class="chart-area"><canvas data-bs-chart="{&quot;type&quot;:&quot;doughnut&quot;,&quot;data&quot;:{&quot;labels&quot;:[&quot;Direct&quot;,&quot;Social&quot;,&quot;Referral&quot;],&quot;datasets&quot;:[{&quot;label&quot;:&quot;&quot;,&quot;backgroundColor&quot;:[&quot;#4e73df&quot;,&quot;#1cc88a&quot;,&quot;#36b9cc&quot;],&quot;borderColor&quot;:[&quot;#ffffff&quot;,&quot;#ffffff&quot;,&quot;#ffffff&quot;],&quot;data&quot;:[&quot;50&quot;,&quot;30&quot;,&quot;15&quot;]}]},&quot;options&quot;:{&quot;maintainAspectRatio&quot;:false,&quot;legend&quot;:{&quot;display&quot;:false},&quot;title&quot;:{}}}"></canvas></div>
-                                <div
-                                    class="text-center small mt-4"><span class="mr-2"><i class="fas fa-circle text-primary"></i>&nbsp;Direct</span><span class="mr-2"><i class="fas fa-circle text-success"></i>&nbsp;Social</span><span class="mr-2"><i class="fas fa-circle text-info"></i>&nbsp;Refferal</span></div>
-                        </div>
+                            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                                <table class="table my-0" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>id</th>
+                                            <th>Product Name</th>
+                                            <th>Bronze Value</th>
+                                            <th>Description</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                       
+                                        <?php
+                                        while ($row = mysqli_fetch_array($someproducts)) { 
+        echo "<tr><td>".$row['id']."</td>";
+        echo "<td>".$row['productname']."</td>"; 
+        echo "<td>".$row['bronzevalue']."</td>";  
+        echo "<td>".$row['description']."</td></tr>";  
+          
+        
+           }  
+            ?>
+                                       
+                                    </tbody>
+                                    
+                                </table>
+                            </div>
+                            <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                        <ul class="pagination">
+                                            <form method = "POST">
+                                            <select name = "ppage" class="form-control" >
+         
+         
+         
+                                            <?php
+                                            for($ppage = 1; $ppage<= $pnumber_of_page; $ppage++) {  
+    echo '<option value ="'.$ppage.'">' . $ppage . ' </option>'; } 
+    ?>
+    </select>
+    <input class="btn btn-primary" type="submit" name = "submit_1" value = "Go!">
+                                                        </form>
+                                            
+                                    </nav>
+                               </div>
                     </div>
                 </div>
             </div>
@@ -295,72 +369,60 @@ if(isset($_POST['submit_2'])) {
                             <h6 class="text-muted card-subtitle mb-2">Dsplay all users and their roles</h6>
                         </div>
                         <div class="card-body">
-                            <div class="row">
+                            <!--<div class="row">
                                 <div class="col-md-6 text-nowrap">
                                     <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label>Show&nbsp;<select class="form-control form-control-sm custom-select custom-select-sm"><option value="10" selected="">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>&nbsp;</label></div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
                                 </div>
-                            </div>
+                            </div>-->
                             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
                                 <table class="table my-0" id="dataTable">
                                     <thead>
                                         <tr>
                                             <th>id</th>
                                             <th>Name</th>
-                                            <th>user id</th>
-                                            <th>Transaction ID</th>
-                                            <th>Description</th>
-                                            <th>Bonus Type</th>
-                                            <th>Date</th>
-                                            <th>Issuer</th>
+                                             <th>Description</th>
+                                            <th>Role</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg">Airi Satou</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            <td>33</td>
-                                            <td>2008/11/28</td>
-                                            <td>$162,700</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg">Airi Satou</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            <td>33</td>
-                                            <td>2008/11/28</td>
-                                            <td>$162,700</td>
-                                        </tr>
+                                       
+                                        <?php
+                                        while ($row = mysqli_fetch_array($somemanagers)) { 
+
+        echo "<tr><td>".$row['id']."</td>"; 
+        echo "<td>".$row['name']."</td>";  
+        echo "<td>".$row['description']."</td>";  
+        echo "<td>".$row['role']."</td></tr>";  
+        
+            }  ?>
                                        
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td><strong>Name</strong></td>
-                                            <td><strong>Position</strong></td>
-                                            <td><strong>Office</strong></td>
-                                            <td><strong>Age</strong></td>
-                                            <td><strong>Start date</strong></td>
-                                            <td><strong>Salary</strong></td>
-                                        </tr>
-                                    </tfoot>
+                                    
                                 </table>
                             </div>
                             <div class="row">
                                 <div class="col-md-6 align-self-center">
-                                    <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
+                                    <!--<p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p> -->
                                 </div>
                                 <div class="col-md-6">
                                     <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
                                         <ul class="pagination">
-                                            <li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
-                                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                            <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
-                                        </ul>
+                                            <form method = "POST">
+                                            <select name = "page" class="form-control" >
+         
+         
+         
+                                            <?php
+                                            for($page = 1; $page<= $number_of_page; $page++) {  
+    echo '<option value ="'.$page.'">' . $page . ' </option>'; } 
+    ?>
+    </select>
+    <input class="btn btn-primary" type="submit" name = "submit_1" value = "Go!">
+                                                        </form>
+                                            
                                     </nav>
                                 </div>
                             </div>

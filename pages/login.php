@@ -48,18 +48,22 @@ if(!empty($username)&&!empty($password)){
     $hashedpassword = password_hash( $password, PASSWORD_BCRYPT );
     $play2 = new ManagersModel();
     $user = $play2->getManagerbyID($username);
-    if($user->num_rows>0 && password_verify($password,$user->fetch_assoc()['password'])){
+    $thisuser = $user->fetch_assoc();
+    if($user->num_rows>0 && password_verify($password,$thisuser['password'])){
         session_start();
 
-        $_SESSION["user"] = $user->fetch_assoc()['name'];
+        $_SESSION["user"] = $thisuser['name'];
+        $_SESSION["id"] = $thisuser['id'];
         header('location: dashboard.php');
     }else{
         $play1 = new UsersModel();
         $user = $play1->getUserbyID($username);
-        if($user->num_rows>0 && password_verify($password,$user->fetch_assoc()['password'])){
+        $thisuser = $user->fetch_assoc();
+        if($user->num_rows>0 && password_verify($password,$thisuser['password'])){
             session_start();
 
-            $_SESSION["user"] = $user->fetch_assoc()['name'];
+            $_SESSION["user"] = $thisuser['name'];
+            $_SESSION["id"] = $thisuser['id'];
             //echo $_SESSION["user"]->fetch_assoc()['name'];
             header('location: profile.php');
         }else{

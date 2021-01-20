@@ -1,3 +1,80 @@
+<?php
+session_start();
+include_once('./models/TransactionsModel.php');
+include_once('./models/UsersModel.php');
+include_once('./models/BonusesModel.php');
+include_once('./models/RanksModel.php');
+require 'vendor/autoload.php';
+$data = [
+    ['id' => 1, 'parent' => 0, 'title' => 'Node 1'],
+    ['id' => 2, 'parent' => 1, 'title' => 'Node 1.1'],
+    ['id' => 3, 'parent' => 0, 'title' => 'Node 3'],
+    ['id' => 4, 'parent' => 1, 'title' => 'Node 1.2'],
+];
+$tree = new BlueM\Tree($data);
+echo $tree->getNodeById(1)->countChildren();
+
+
+if (!isset($_POST['page'])){
+    $page = 1;  
+} else {  
+    $page = $_POST['page'];  
+}  
+
+$results_per_page = 10;  
+$page_first_result = ($page-1) * $results_per_page;  
+
+$page_first_result = ($page-1) * $results_per_page;
+$transactions = new TransactionsModel();
+$result = $transactions-> getAllTransactions();
+$number_of_result = mysqli_num_rows($result);  
+$sometransactions = $transactions->getSomeTransactions($page_first_result,$results_per_page);
+//determine the total number of pages available  
+$number_of_page = ceil ($number_of_result / $results_per_page);
+
+
+if(isset( $_POST['submit_bv']) ) {
+if(isset($_POST['id'])){
+    $id = $_POST['id'];
+    }
+    if(isset($_POST['bv'])){
+    $bv = $_POST['bv'];
+    }
+    if(isset($_POST['description'])){
+    $description = $_POST['description'];
+    }
+    if(!empty($id)&&!empty($bv)&&!empty($description)){
+        $play = new TransactionsModel();
+        $play1 = new UsersModel();
+        $myuser = $play1-> getUserbyrealID($id)->fetch_assoc();
+        $oldbv = $myuser['bronzevalue'] ;
+        $newbv = $oldbv + $bv;
+        $thisbv = $bv;
+        $name = $myuser['name'];
+        $issuer = $_SESSION['id'];
+        $userid = $myuser['id'];
+        $transactionid = $play->recordTransaction ($name,$issuer,$oldbv,$thisbv,$newbv,$description,$userid);
+        if($transactionid!=FALSE){
+
+            $play1->updateUserItembyID ($userid,'s','i','i','bronzevalue',$newbv);
+            ///
+            $ranker = new RanksModel();
+            $ranker->addRank($name, $userid ,$myuser['rank'] , 'general');
+            
+            $bonusmaker = new BonusesModel();
+            $transactionid = $transactionid->fetch_assoc()['LAST_INSERT_ID()'];
+            $bonusmaker->addBonus($name,$userid,$transactionid,$description,'registration bonus');
+
+            //header('location: login.php');
+            $mssg = " Product added";
+        }else{
+            $mssg = " Something went wrong, could not add products";
+        }
+    }
+}
+
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -170,18 +247,20 @@
     </table>
     <button type="button" class="delete-row">Delete Row</button>
   <button type="button" class="show">Use Products to assign value</button>
+                            <form method = "POST">
                             <div class="input-group">
-                                <div class="input-group-prepend"><span class="input-group-text">User ID</span></div><input class="form-control" type="text">
+                                <div class="input-group-prepend"><span class="input-group-text">User ID</span></div><input class="form-control"  name = "id" type="text">
                                 <div class="input-group-append"></div>
                             </div>
                             <div class="input-group">
-                                <div class="input-group-prepend"><span class="input-group-text">Bronze Value</span></div><input class="form-control" id = "usebv" type="text">
+                                <div class="input-group-prepend"><span class="input-group-text">Bronze Value</span></div><input class="form-control" id = "usebv" name = "bv"  type="text">
                                 <div class="input-group-append"></div>
                             </div>
                             <div class="input-group">
-                                <div class="input-group-prepend"><span class="input-group-text">Description</span></div><input class="form-control" id = "usedesc" type="text">
-                                <div class="input-group-append"><button class="btn btn-primary" type="button">Go!</button></div>
+                                <div class="input-group-prepend"><span class="input-group-text">Description</span></div><input class="form-control" id = "usedesc"  name = "description" type="text">
+                                <div class="input-group-append"><input class="btn btn-primary" type="submit" name = "submit_bv" value = "GO!"></div>
                             </div>
+                            </form>
                         </div>
                         <div class="card-header py-3">
                             <p class="text-primary m-0 font-weight-bold">Bronze Value List</p>
@@ -211,34 +290,24 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg">Airi Satou</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>33</td>
-                                        <td>2008/11/28</td>
-                                        <td>$162,700</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg">Airi Satou</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>33</td>
-                                        <td>2008/11/28</td>
-                                        <td>$162,700</td>
-                                    </tr>
+                                <?php
+                                        while ($row = mysqli_fetch_array($sometransactions)) { 
+        echo "<tr><td>".$row['id']."</td>";
+        echo "<td>".$row['name']."</td>"; 
+        echo "<td>".$row['description']."</td>";  
+        echo "<td>".$row['oldbv']."</td>";  
+        echo "<td>".$row['thisbv']."</td>";  
+        echo "<td>".$row['newbv']."</td>";  
+        echo "<td>".$row['transactiontime']."</td>";  
+        echo "<td>".$row['issuer']."</td></tr>";  
+
+          
+        
+           }  
+            ?>
                                     
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td><strong>Name</strong></td>
-                                        <td><strong>Position</strong></td>
-                                        <td><strong>Office</strong></td>
-                                        <td><strong>Age</strong></td>
-                                        <td><strong>Start date</strong></td>
-                                        <td><strong>Salary</strong></td>
-                                    </tr>
-                                </tfoot>
+                                
                             </table>
                         </div>
                         <div class="row">
@@ -246,15 +315,22 @@
                                 <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
                             </div>
                             <div class="col-md-6">
-                                <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
-                                    <ul class="pagination">
-                                        <li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">«</span></a></li>
-                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                        <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
-                                    </ul>
-                                </nav>
+                            <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                        <ul class="pagination">
+                                            <form method = "POST">
+                                            <select name = "page" class="form-control" >
+         
+         
+         
+                                            <?php
+                                            for($page = 1; $page<= $number_of_page; $page++) {  
+    echo '<option value ="'.$page.'">' . $page . ' </option>'; } 
+    ?>
+    </select>
+    <input class="btn btn-primary" type="submit" name = "submit_1" value = "Go!">
+                                                        </form>
+                                            
+                                    </nav>
                             </div>
                         </div>
                     </div>

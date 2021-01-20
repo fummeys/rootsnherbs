@@ -3,16 +3,16 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include_once('./scripts/config.scr.php');
 
-class ManagersModel {
+class RanksModel {
 
-    function addManager($username,$name,$password,$role,$description){
+    function addRank($name, $userid , $oldrank, $newrank){
         global $conn;
         
-        $sql_putTransactions =  "INSERT INTO `managers`( `username`, `name`, `password`, `role`, `description`) VALUES (?,?,?,?,?)";
+        $sql_putTransactions = "INSERT INTO `ranks`( `name`, `userid`, `oldrank`, `newrank`) VALUES (?,?,?,?)";
 
         $statement_putTransactions = $conn->prepare($sql_putTransactions);
         echo $conn->error;
-        $statement_putTransactions->bind_param("sssis",$username,$name,$password,$role,$description);
+        $statement_putTransactions->bind_param("siss",$name, $userid , $oldrank, $newrank);
         if($statement_putTransactions->execute()==TRUE){
            
             return TRUE;
@@ -25,11 +25,11 @@ class ManagersModel {
        
         $conn->close();
     }
-    function getManagerbyID ($username){
+    function getRankbyID ($userid){
         global $conn;
-        $sql_putTransactions = "SELECT * FROM `managers` WHERE `username`=?";
+        $sql_putTransactions = "SELECT * FROM `ranks` WHERE `userid`=?";
         $statement_putTransactions = $conn->prepare($sql_putTransactions);
-        $statement_putTransactions->bind_param("s",$username);
+        $statement_putTransactions->bind_param("s",$userid);
         echo $conn->error;
         $statement_putTransactions->execute();
         $allTransactions = $statement_putTransactions->get_result();
@@ -39,9 +39,9 @@ class ManagersModel {
         $statement_putTransactions->close();
         $conn->close();
     }
-    function getAllManagers (){
+    function getAllRanks (){
         global $conn;
-        $sql_getTransactions = "SELECT * FROM `managers`";
+        $sql_getTransactions = "SELECT * FROM `ranks`";
         $statement_getTransactions = $conn->prepare($sql_getTransactions);
         $statement_getTransactions->execute();
         $allTransactions = $statement_getTransactions->get_result();
@@ -51,9 +51,9 @@ class ManagersModel {
         $statement_getTransactions->close();
         $conn->close();
     }
-    function getSomeManagers ($page_first_result,$results_per_page){
+    function getSomeRanks ($page_first_result,$results_per_page){
         global $conn;
-        $sql_getTransactions = "SELECT * FROM managers LIMIT  ?, ?";
+        $sql_getTransactions = "SELECT * FROM ranks LIMIT  ?, ?";
         $statement_getTransactions = $conn->prepare($sql_getTransactions);
         $statement_getTransactions->bind_param("ii",$page_first_result,$results_per_page);
         $statement_getTransactions->execute();
@@ -83,29 +83,9 @@ class ManagersModel {
         $conn->close();
     }
 
-    function updateRolebyID($id,$role){
+    function deleteProductbyID ($id){
         global $conn;
-        $sql_putTransactions = "UPDATE `managers` SET `role`= ? WHERE `id` = ?";
-        $statement_putTransactions = $conn->prepare($sql_putTransactions);
-        
-        $statement_putTransactions->bind_param("ii", $role,$id);
-        echo $conn->error;
-        $statement_putTransactions->execute();
-        echo $conn->error;
-        if($statement_putTransactions->execute()==TRUE){
-           
-            return TRUE;
-        }else{
-            return FALSE;
-        }
-        
-        $statement_putTransactions->close();
-        $conn->close();
-    }
-
-    function deleteManagerbyID ($id){
-        global $conn;
-        $sql_putTransactions = "DELETE FROM `managers` WHERE `id` = '?'";
+        $sql_putTransactions = "DELETE FROM `products` WHERE `id` = '?'";
         $statement_putTransactions = $conn->prepare($sql_putTransactions);
         $statement_putTransactions->bind_param("i",$id);
         $statement_putTransactions->execute();

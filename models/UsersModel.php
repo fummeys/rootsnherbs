@@ -51,6 +51,19 @@ class UsersModel {
         $statement_getTransactions->close();
         $conn->close();
     }
+    function getUserbyrealID ($id){
+        global $conn;
+        $sql_putTransactions = "SELECT * FROM `users` WHERE `id`=? ";
+        $statement_putTransactions = $conn->prepare($sql_putTransactions);
+        $statement_putTransactions->bind_param("s",$id);
+        $statement_putTransactions->execute();
+        $allTransactions = $statement_putTransactions->get_result();
+    
+        return $allTransactions;
+        
+        $statement_getTransactions->close();
+        $conn->close();
+    }
     function updateUserbyID ($id,$username,$name,$password,$sponsor,$ancestors,$descendants,$bronzevalue,$rank, $phone, $bankaccount){
         global $conn;
         $sql_putTransactions =
@@ -64,6 +77,25 @@ class UsersModel {
             echo "TRUE";
         }else{
             echo "FALSE";
+        }
+        
+        $statement_putTransactions->close();
+        $conn->close();
+    }
+    function updateUserItembyID ($id,$type1,$type2,$type3,$title,$data){
+        global $conn;
+        $sql_putTransactions =
+        "UPDATE `users` SET `" . $title . "` =? WHERE `id` = ?";
+        $statement_putTransactions = $conn->prepare($sql_putTransactions);
+        echo $conn->error;
+        $statement_putTransactions->bind_param($type2.$type3,$data, $id);
+        $statement_putTransactions->execute();
+        echo $conn->error;
+        if($statement_putTransactions->execute()==TRUE){
+           
+            return TRUE;
+        }else{
+            return FALSE;
         }
         
         $statement_putTransactions->close();

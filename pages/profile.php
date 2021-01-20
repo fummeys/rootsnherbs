@@ -1,5 +1,85 @@
 <?php
 session_start();
+include_once('./models/ProductsModel.php');
+include_once('./models/UsersModel.php');
+include_once('./models/BonusesModel.php');
+
+
+$play1 = new UsersModel();
+$id = $_SESSION['id'];
+        $user = $play1->getUserbyrealID($id);
+        $thisuser = $user->fetch_assoc();
+
+if (!isset($_POST['page'])){
+    $page = 1;  
+} else {  
+    $page = $_POST['page'];  
+}  
+
+$results_per_page = 10;  
+$page_first_result = ($page-1) * $results_per_page;  
+
+$page_first_result = ($page-1) * $results_per_page;
+$bonuses = new BonusesModel();
+$result = $bonuses-> getBonusbyID ($id);
+$number_of_result = mysqli_num_rows($result);  
+$somebonuses = $bonuses->getSomeBonusesbyID($id,$page_first_result,$results_per_page);
+//determine the total number of pages available  
+$number_of_page = ceil ($number_of_result / $results_per_page);
+
+if (!isset($_POST['ppage'])){
+    $ppage = 1;  
+} else {  
+    $ppage = $_POST['ppage'];  
+}  
+
+$presults_per_page = 5;  
+$ppage_first_result = ($ppage-1) * $presults_per_page;  
+
+$ppage_first_result = ($ppage-1) * $presults_per_page;
+$products = new ProductsModel();
+$presult = $products-> getAllProducts();
+$pnumber_of_result = mysqli_num_rows($presult);  
+$someproducts = $products->getSomeProducts($ppage_first_result,$presults_per_page);
+//determine the total number of pages available  
+$pnumber_of_page = ceil ($pnumber_of_result / $presults_per_page);
+
+
+if(isset($_POST['submit_data'])) {
+    echo  'submitted \n';
+  if(isset($_POST['name'])){
+    $name = $_POST['name'];
+    echo  'name submitted \n';
+    
+    }
+    if(isset($_POST['bankaccount'])){
+    $bankaccount = $_POST['bankaccount'];
+    echo  'bank submitted \n';
+    }
+    if(isset($_POST['phone'])){
+        $phone = $_POST['phone'];
+        echo  'phone submitted \n';
+        }
+    if(!empty($name)&&!empty($phone)&&!empty($bankaccount)){
+        echo  'every is submitted \n';
+           $play1 = new UsersModel();
+           $id = $_SESSION['id'];
+        if($play1->updateUserItembyID ($id,'s','s','i','phone',$phone)==TRUE
+        && $play1->updateUserItembyID ($id,'s','s','i','bankaccount',$bankaccount)==TRUE
+        && $play1->updateUserItembyID ($id,'s','s','i','name',$name)==TRUE
+        ){
+            
+            $mssg = "User details updated";
+            header('location: profile.php');
+            //header('location: dashboard.php');
+        }else{
+            $mssg = " Something went wrong, could not update role";
+        }
+    }
+  
+
+}
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -208,36 +288,41 @@ session_start();
                                         <p class="text-primary m-0 font-weight-bold">User Settings</p>
                                     </div>
                                     <div class="card-body">
-                                        <form>
+                                        <form method = "POST">
                                             <div class="form-row">
                                                 <div class="col">
-                                                    <div class="form-group"><label for="username"><strong>Username</strong></label><input class="form-control" type="text" placeholder="user.name" name="username"></div>
+                                                    <div class="form-group"><label for="username"><strong>Name</strong></label><input class="form-control" type="text" placeholder="user.name" value = "<?php echo $thisuser['name']; ?>" name="name"></div>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="form-group"><label for="email"><strong>user ID</strong><br></label><input class="form-control" type="email" placeholder="user@example.com" name="email"></div>
+                                                    <div class="form-group"><label for="email"><strong>Phone</strong><br></label><input class="form-control" type="text" placeholder="user@example.com" name="phone" value = "<?php echo $thisuser['phone']; ?>"></div>
                                                 </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="col">
-                                                    <div class="form-group"><label for="first_name"><strong>First Name</strong></label><input class="form-control" type="text" placeholder="John" name="first_name"></div>
+                                                    <div class="form-group"><label for="first_name"><strong>Account number</strong></label><input class="form-control" type="text" placeholder="123455" name="bankaccount" value = "<?php echo $thisuser['bankaccount']; ?>"></div>
                                                 </div>
-                                                <div class="col">
+                                               <!-- <div class="col">
                                                     <div class="form-group"><label for="last_name"><strong>Last Name</strong></label><input class="form-control" type="text" placeholder="Doe" name="last_name"></div>
-                                                </div>
+                                                </div>-->
                                             </div>
                                             <div class="form-group">
                                                 <div class="col">
-                                                    <div class="form-group"><label for="username"><strong>Account Number</strong></label><input class="form-control" type="text" placeholder="user.name" name="username"></div>
+                                                    <div class="form-group"><label for="username"><strong>username</strong></label><input class="form-control" type="text" placeholder="username" value = "<?php echo $thisuser['username']; ?>" name="username"></div>
                                                 </div>
                                             </div>
-                                        </form><button class="btn btn-primary btn-sm" type="submit">Save Settings</button></div>
+                                            <input class="btn btn-primary btn-sm" name = "submit_data" value = "Update" type="submit">
+                                        </form>
+                                        <?php if(!empty($mssg)){
+                                    echo '<div class="text-center" style="color:green">'.$mssg.'</div>';
+                                    } ?>
+                                        </div>
                                 </div>
                                 <div class="card shadow">
                                     <div class="card-header py-3">
                                         <p class="text-primary m-0 font-weight-bold">Bronze Value</p>
                                     </div>
                                     <div class="card-body">
-                                        <p>1200</p>
+                                        <p><?php echo $thisuser['bronzevalue']; ?></p>
                                     </div>
                                 </div>
                             </div>

@@ -29,6 +29,8 @@ Routes::set('/rank.php', function(){
 Routes::set('/dashboard.php', function(){
     ControllerRoutes::RenderPage('dashboard');
 });
+
+
 Routes::set('/bonuses.php', function(){
     ControllerRoutes::RenderPage('bonuses');
 });

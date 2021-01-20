@@ -3,21 +3,23 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 include_once('./scripts/config.scr.php');
 
-class ProductsModel {
+class BonusesModel {
 
-    function addProduct($productname,$bronzevalue,$description){
+    function addBonus($name,$userid,$transactionid,$description,$bonustype){
         global $conn;
         
-        $sql_putTransactions = "INSERT INTO `products`(`productname`, `bronzevalue`, `description`) VALUES (?,?,?)";
+        $sql_putTransactions = "INSERT INTO `bonuses`(`name`, `userid`, `transactionid`, `description`, `bonustype`) VALUES (?,?,?,?,?)";
 
         $statement_putTransactions = $conn->prepare($sql_putTransactions);
         echo $conn->error;
-        $statement_putTransactions->bind_param("sss",$productname,$bronzevalue,$description);
+        $statement_putTransactions->bind_param("siiss",$name,$userid,$transactionid,$description,$bonustype);
+        echo $conn->error;
         if($statement_putTransactions->execute()==TRUE){
-           
+            echo $conn->error;
             return TRUE;
         }else{
             return FALSE;
+            echo $conn->error;
         }
         $statement_putTransactions->free_result();
         $statement_putTransactions->close();
@@ -25,11 +27,12 @@ class ProductsModel {
        
         $conn->close();
     }
-    function getManagerbyID ($username){
+    function getBonusbyID ($id){
         global $conn;
-        $sql_putTransactions = "SELECT * FROM `managers` WHERE `username`=?";
+        $sql_putTransactions =
+        "SELECT * FROM `bonuses` WHERE `userid` = ? ";
         $statement_putTransactions = $conn->prepare($sql_putTransactions);
-        $statement_putTransactions->bind_param("s",$username);
+        $statement_putTransactions->bind_param("i",$id);
         echo $conn->error;
         $statement_putTransactions->execute();
         $allTransactions = $statement_putTransactions->get_result();
@@ -39,9 +42,34 @@ class ProductsModel {
         $statement_putTransactions->close();
         $conn->close();
     }
-    function getSomeProducts ($page_first_result,$results_per_page){
+    function getAllBonuses (){
         global $conn;
-        $sql_getTransactions = "SELECT * FROM products LIMIT  ?, ?";
+        $sql_getTransactions = "SELECT * FROM `bonuses`";
+        $statement_getTransactions = $conn->prepare($sql_getTransactions);
+        $statement_getTransactions->execute();
+        $allTransactions = $statement_getTransactions->get_result();
+    
+        return $allTransactions;
+        
+        $statement_getTransactions->close();
+        $conn->close();
+    }
+    function getSomeBonusesbyID ($id,$page_first_result,$results_per_page){
+        global $conn;
+        $sql_getTransactions = "SELECT * FROM bonuses WHERE `userid` = ? LIMIT  ?, ?";
+        $statement_getTransactions = $conn->prepare($sql_getTransactions);
+        $statement_getTransactions->bind_param("iii",$id,$page_first_result,$results_per_page);
+        $statement_getTransactions->execute();
+        $allTransactions = $statement_getTransactions->get_result();
+    
+        return $allTransactions;
+        
+        $statement_getTransactions->close();
+        $conn->close();
+    }
+    function getSomeBonuses ($page_first_result,$results_per_page){
+        global $conn;
+        $sql_getTransactions = "SELECT * FROM bonuses LIMIT  ?, ?";
         $statement_getTransactions = $conn->prepare($sql_getTransactions);
         $statement_getTransactions->bind_param("ii",$page_first_result,$results_per_page);
         $statement_getTransactions->execute();
@@ -52,37 +80,7 @@ class ProductsModel {
         $statement_getTransactions->close();
         $conn->close();
     }
-    function getAllProducts (){
-        global $conn;
-        $sql_getTransactions = "SELECT * FROM `products`";
-        $statement_getTransactions = $conn->prepare($sql_getTransactions);
-        $statement_getTransactions->execute();
-        $allTransactions = $statement_getTransactions->get_result();
     
-        return $allTransactions;
-        
-        $statement_getTransactions->close();
-        $conn->close();
-    }
-
-    function updateManagerbyID ($id,$username,$name,$password,$role,$description){
-        global $conn;
-        $sql_putTransactions =
-        "UPDATE `managers` SET `username`=?,`name`=?,`password`=?,`role`=?,`description`=? WHERE `id` = '?'";
-        $statement_putTransactions = $conn->prepare($sql_putTransactions);
-        echo $conn->error;
-        $statement_putTransactions->bind_param("sssis",$username,$name,$password,$role,$description,$id);
-        $statement_putTransactions->execute();
-        if($statement_putTransactions->execute()==TRUE){
-           
-            echo "TRUE";
-        }else{
-            echo "FALSE";
-        }
-        
-        $statement_putTransactions->close();
-        $conn->close();
-    }
 
     function deleteProductbyID ($id){
         global $conn;
