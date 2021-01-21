@@ -14,34 +14,23 @@ if (!isset($_POST['page'])){
 } else {  
     $page = $_POST['page'];  
 }  
-
+if(isset($_REQUEST['id'])){
+$userid = $_REQUEST['id'];
+}else{
+    $userid = $id;   
+}
 $results_per_page = 10;  
 $page_first_result = ($page-1) * $results_per_page;  
 
 $page_first_result = ($page-1) * $results_per_page;
 $bonuses = new BonusesModel();
-$result = $bonuses-> getBonusbyID ($id);
+$result = $bonuses->getBonusbyID ($userid);
 $number_of_result = mysqli_num_rows($result);  
-$somebonuses = $bonuses->getSomeBonusesbyID($id,$page_first_result,$results_per_page);
+$somebonuses = $bonuses->getSomeBonusesbyID($userid,$page_first_result,$results_per_page);
 //determine the total number of pages available  
 $number_of_page = ceil ($number_of_result / $results_per_page);
 
-if (!isset($_POST['ppage'])){
-    $ppage = 1;  
-} else {  
-    $ppage = $_POST['ppage'];  
-}  
 
-$presults_per_page = 5;  
-$ppage_first_result = ($ppage-1) * $presults_per_page;  
-
-$ppage_first_result = ($ppage-1) * $presults_per_page;
-$products = new ProductsModel();
-$presult = $products-> getAllProducts();
-$pnumber_of_result = mysqli_num_rows($presult);  
-$someproducts = $products->getSomeProducts($ppage_first_result,$presults_per_page);
-//determine the total number of pages available  
-$pnumber_of_page = ceil ($pnumber_of_result / $presults_per_page);
 
 
 if(isset($_POST['submit_data'])) {
@@ -69,7 +58,7 @@ if(isset($_POST['submit_data'])) {
         ){
             
             $mssg = "User details updated";
-            header('location: profile.php');
+            header('location: profile');
             //header('location: dashboard.php');
         }else{
             $mssg = " Something went wrong, could not update role";
@@ -102,12 +91,21 @@ if(isset($_POST['submit_data'])) {
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
+<<<<<<< HEAD
                     <li class="nav-item" role="presentation"><a class="nav-link" href="./dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link active" href="./profile"><i class="fas fa-user"></i><span>Profile</span></a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link" href="./issuebv"><i class="fas fa-table"></i><span>Issue Bronze Value</span></a><a class="nav-link" href="./rank"><i class="fas fa-table"></i><span>Rank</span></a><a class="nav-link" href="./bonuses"><i class="fas fa-table"></i><span>Bonuses</span></a></li>
                     <li
                         class="nav-item" role="presentation"><a class="nav-link" href="./login"><i class="far fa-user-circle"></i><span>Login</span></a></li>
                         <li class="nav-item" role="presentation"><a class="nav-link" href="./register"><i class="fas fa-user-circle"></i><span>Register</span></a></li>
+=======
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link active" href="profile"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="issuebv"><i class="fas fa-table"></i><span>Issue Bronze Value</span></a><a class="nav-link" href="rank"><i class="fas fa-table"></i><span>Rank</span></a><a class="nav-link" href="bonuses"><i class="fas fa-table"></i><span>Bonuses</span></a></li>
+                    <li
+                        class="nav-item" role="presentation"><a class="nav-link" href="login"><i class="far fa-user-circle"></i><span>Login</span></a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="register"><i class="fas fa-user-circle"></i><span>Register</span></a></li>
+>>>>>>> 82111fca4f84db1d5109b248521fc5f0f4a50a18
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -218,7 +216,7 @@ if(isset($_POST['submit_data'])) {
                     <div class="col-lg-4">
                         <div class="card mb-3">
                             <div class="card-body text-center shadow"><img class="rounded-circle mb-3 mt-4" src="assets/img/dogs/image2.jpeg" width="160" height="160">
-                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="button">Change Photo</button></div>
+                               <!-- <div class="mb-3"><button class="btn btn-primary btn-sm" type="button">Change Photo</button></div> -->
                             </div>
                         </div>
                         <div class="card shadow mb-4">
@@ -226,26 +224,8 @@ if(isset($_POST['submit_data'])) {
                                 <h6 class="text-primary font-weight-bold m-0">Rank</h6>
                             </div>
                             <div class="card-body">
-                                <h4 class="small font-weight-bold">Bronze<span class="float-right">20%</span></h4>
-                                <div class="progress progress-sm mb-3">
-                                    <div class="progress-bar bg-danger" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;"><span class="sr-only">20%</span></div>
-                                </div>
-                                <h4 class="small font-weight-bold">Ruby<span class="float-right">40%</span></h4>
-                                <div class="progress progress-sm mb-3">
-                                    <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;"><span class="sr-only">40%</span></div>
-                                </div>
-                                <h4 class="small font-weight-bold">Customer Database<span class="float-right">60%</span></h4>
-                                <div class="progress progress-sm mb-3">
-                                    <div class="progress-bar bg-primary" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"><span class="sr-only">60%</span></div>
-                                </div>
-                                <h4 class="small font-weight-bold">Payout Details<span class="float-right">80%</span></h4>
-                                <div class="progress progress-sm mb-3">
-                                    <div class="progress-bar bg-info" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;"><span class="sr-only">80%</span></div>
-                                </div>
-                                <h4 class="small font-weight-bold">Account setup<span class="float-right">Complete!</span></h4>
-                                <div class="progress progress-sm mb-3">
-                                    <div class="progress-bar bg-success" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"><span class="sr-only">100%</span></div>
-                                </div>
+                            <h1 class = "text-warning"><?php echo $thisuser['rank']; ?></h1>
+                            
                             </div>
                         </div>
                     </div>
@@ -284,7 +264,7 @@ if(isset($_POST['submit_data'])) {
                             <div class="col">
                                 <div class="card shadow mb-3">
                                     <div class="card-header py-3">
-                                        <p class="text-primary m-0 font-weight-bold">User Settings</p>
+                                        <p class="text-primary m-0 font-weight-bold">User Details</p>
                                     </div>
                                     <div class="card-body">
                                         <form method = "POST">
@@ -321,7 +301,7 @@ if(isset($_POST['submit_data'])) {
                                         <p class="text-primary m-0 font-weight-bold">Bronze Value</p>
                                     </div>
                                     <div class="card-body">
-                                        <p><?php echo $thisuser['bronzevalue']; ?></p>
+                                        <h3 class = "text-success"><?php echo $thisuser['bronzevalue']; ?></h3>
                                     </div>
                                 </div>
                             </div>
@@ -337,46 +317,59 @@ if(isset($_POST['submit_data'])) {
                             <table class="table my-0" id="dataTable">
                                 <thead>
                                     <tr>
-                                        <th>id</th>
+                                    <th>id</th>
                                         <th>Name</th>
                                         <th>user id</th>
                                         <th>Transaction ID</th>
                                         <th>Description</th>
                                         <th>Bonus Type</th>
                                         <th>Date</th>
-                                        <th>Issuer</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg">Airi Satou</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>33</td>
-                                        <td>2008/11/28</td>
-                                        <td>$162,700</td>
-                                    </tr>
-                                    <tr>
-                                        <td><img class="rounded-circle mr-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg">Airi Satou</td>
-                                        <td>Accountant</td>
-                                        <td>Tokyo</td>
-                                        <td>33</td>
-                                        <td>2008/11/28</td>
-                                        <td>$162,700</td>
-                                    </tr>
-                                    
+                                <?php
+                                        while ($row = mysqli_fetch_array($somebonuses)) { 
+        echo "<tr><td>".$row['id']."</td>";
+        echo "<td>".$row['name']."</td>"; 
+        echo "<td>".$row['userid']."</td>";  
+        echo "<td>".$row['transactionid']."</td>";  
+        echo "<td>".$row['description']."</td>";  
+        echo "<td>".$row['bonustype']."</td>";  
+        echo "<td>".$row['time']."</td></tr>";  
+
+          
+        
+           }  
+            ?>
                                 </tbody>
                                 <tfoot>
-                                    <tr>
-                                        <td><strong>Name</strong></td>
-                                        <td><strong>Position</strong></td>
-                                        <td><strong>Office</strong></td>
-                                        <td><strong>Age</strong></td>
-                                        <td><strong>Start date</strong></td>
-                                        <td><strong>Salary</strong></td>
-                                    </tr>
+                                   
                                 </tfoot>
                             </table>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 align-self-center">
+                                <!--<p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p> -->
+                            </div>
+                            <div class="col-md-6">
+                            <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
+                                        <ul class="pagination">
+                                            <form method = "POST">
+                                            <select name = "page" class="form-control" >
+         
+         
+         
+                                            <?php
+                                            for($page = 1; $page<= $number_of_page; $page++) {  
+    echo '<option value ="'.$page.'">' . $page . ' </option>'; } 
+    ?>
+    </select>
+    <input class="btn btn-primary" type="submit" name = "submit_1" value = "Go!">
+                                                        </form>
+                                            
+                                    </nav>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once('./models/RanksModel.php');
+include_once('./models/UsersModel.php');
 
 if (!isset($_POST['page'])){
     $page = 1;  
@@ -12,10 +12,10 @@ $results_per_page = 10;
 $page_first_result = ($page-1) * $results_per_page;  
 
 $page_first_result = ($page-1) * $results_per_page;
-$ranks = new RanksModel();
-$result = $ranks-> getAllRanks();
+$users = new UsersModel();
+$result = $users-> getAllUsers();
 $number_of_result = mysqli_num_rows($result);  
-$someranks = $ranks->getSomeRanks($page_first_result,$results_per_page);
+$someusers = $users->getSomeUsers($page_first_result,$results_per_page);
 //determine the total number of pages available  
 $number_of_page = ceil ($number_of_result / $results_per_page);
 
@@ -27,7 +27,7 @@ $number_of_page = ceil ($number_of_result / $results_per_page);
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Ranks - Roots & Herbs</title>
+    <title>Users - Roots & Herbs</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
@@ -43,12 +43,12 @@ $number_of_page = ceil ($number_of_result / $results_per_page);
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="profile"><i class="fas fa-user"></i><span>Profile</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="issuebv"><i class="fas fa-table"></i><span>Issue Bronze Value</span></a><a class="nav-link" href="rank"><i class="fas fa-table"></i><span>Rank</span></a><a class="nav-link" href="bonuses"><i class="fas fa-table"></i><span>Bonuses</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="dashboard.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="profile.php"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="issuebv.php"><i class="fas fa-table"></i><span>Issue Bronze Value</span></a><a class="nav-link" href="rank.php"><i class="fas fa-table"></i><span>Rank</span></a><a class="nav-link" href="bonuses.php"><i class="fas fa-table"></i><span>Bonuses</span></a></li>
                     <li
-                        class="nav-item" role="presentation"><a class="nav-link" href="login"><i class="far fa-user-circle"></i><span>Login</span></a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="register"><i class="fas fa-user-circle"></i><span>Register</span></a></li>
+                        class="nav-item" role="presentation"><a class="nav-link" href="login.php"><i class="far fa-user-circle"></i><span>Login</span></a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="register.php"><i class="fas fa-user-circle"></i><span>Register</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -154,15 +154,15 @@ $number_of_page = ceil ($number_of_result / $results_per_page);
             </div>
             </nav>
             <div class="container-fluid">
-                <h3 class="text-dark mb-4">Ranks</h3>
+                <h3 class="text-dark mb-4">Users</h3>
                 <div class="card shadow">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Ranking Growth</h4>
-                            <h6 class="text-muted card-subtitle mb-2">User ranking updates</h6>
+                            <h4 class="card-title">Users</h4>
+                            <h6 class="text-muted card-subtitle mb-2">Users overview</h6>
                         </div>
                         <div class="card-header py-3">
-                            <p class="text-primary m-0 font-weight-bold">Rank Growth List</p>
+                            <p class="text-primary m-0 font-weight-bold">User details list</p>
                         </div>
                     </div>
                     <div class="card-body">
@@ -178,21 +178,24 @@ $number_of_page = ceil ($number_of_result / $results_per_page);
                             <table class="table my-0" id="dataTable">
                                 <thead>
                                     <tr>
-                                        <th>id</th>
+                                        <th>Distributor Id</th>
                                         <th>Name</th>
-                                        <th>Old Rank</th>
-                                        <th>New Rank</th>
-                                        <th>Date</th>
+                                        <th>username</th>
+                                        <th>Bronze Value</th>
+                                        <th>Rank</th>
+                                        <th>Time Registered</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 <?php
-                                        while ($row = mysqli_fetch_array($someranks)) { 
+                                        while ($row = mysqli_fetch_array($someusers)) { 
         echo "<tr><td>".$row['id']."</td>";
-        echo "<td>".$row['name']."</td>"; 
-        echo "<td>".$row['oldrank']."</td>";  
-        echo "<td>".$row['newrank']."</td>";  
-        echo "<td>".$row['time']."</td>";  
+        echo "<td><a class='nav-item' href = '".'profile'."'>".$row['name']."</a></td>"; 
+        echo "<td>".$row['username']."</td>";  
+        echo "<td>".$row['bronzevalue']."</td>";  
+        echo "<td>".$row['rank']."</td>";  
+        echo "<td>".$row['dateregistered']."</td></tr>";  
+
 
           
         
@@ -205,7 +208,7 @@ $number_of_page = ceil ($number_of_result / $results_per_page);
                         </div>
                         <div class="row">
                             <div class="col-md-6 align-self-center">
-                               <!-- <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p> -->
+                                <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
                             </div>
                             <div class="col-md-6">
                             <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">

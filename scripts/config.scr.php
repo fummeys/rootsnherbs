@@ -10,6 +10,6 @@
     $servername = "localhost";
     $username = "root";
     $password = "";
-    $dbname ="marketing";
+    $dbname ="castle";
 // dbconnection
 $conn = new mysqli($servername, $username, $password, $dbname);

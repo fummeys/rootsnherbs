@@ -53,7 +53,7 @@ class RanksModel {
     }
     function getSomeRanks ($page_first_result,$results_per_page){
         global $conn;
-        $sql_getTransactions = "SELECT * FROM ranks LIMIT  ?, ?";
+        $sql_getTransactions = "SELECT * FROM ranks ORDER BY id DESC LIMIT  ?, ?";
         $statement_getTransactions = $conn->prepare($sql_getTransactions);
         $statement_getTransactions->bind_param("ii",$page_first_result,$results_per_page);
         $statement_getTransactions->execute();

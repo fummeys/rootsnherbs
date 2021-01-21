@@ -1,42 +1,42 @@
 
 <?php
-// include_once('./models/UsersModel.php');
+include_once('./models/UsersModel.php');
 
-//     if(isset($_POST['name'])){
-//     $name = $_POST['name'];
-//     }
-//     if(isset($_POST['username'])){
-//     $username = $_POST['username'];
-//     }
-//     if(isset($_POST['sponsorid'])){
-//     $sponsor = $_POST['sponsorid'];
-//     }
-//     if(isset($_POST['phone'])){
-//         $phone = $_POST['phone'];
-//     }
-//     if(isset($_POST['accountnumber'])){
-//         $bankaccount = $_POST['accountnumber'];
-//     }
-//     if(isset($_POST['password'])){
-//     $password = $_POST['password'];
-//     }
-//     if(!empty($username)&&!empty($password)&&!empty($name)&&!empty($phone)&&!empty($sponsor)&&!empty($bankaccount)){
+    if(isset($_POST['name'])){
+    $name = $_POST['name'];
+    }
+    if(isset($_POST['username'])){
+    $username = $_POST['username'];
+    }
+    if(isset($_POST['sponsorid'])){
+    $sponsor = $_POST['sponsorid'];
+    }
+    if(isset($_POST['phone'])){
+        $phone = $_POST['phone'];
+    }
+    if(isset($_POST['accountnumber'])){
+        $bankaccount = $_POST['accountnumber'];
+    }
+    if(isset($_POST['password'])){
+    $password = $_POST['password'];
+    }
+    if(!empty($username)&&!empty($password)&&!empty($name)&&!empty($phone)&&!empty($sponsor)&&!empty($bankaccount)){
         
-//         $hashedpassword = password_hash( $password, PASSWORD_BCRYPT );
-//         $play = new UsersModel();
-//         $ancestors = "";
-//         $descendants = "";
-//         $bronzevalue = 0;
-//         $rank = "none";
-//         if($play->addUser($username,$name,$hashedpassword,$sponsor,$ancestors,$descendants,$bronzevalue,$rank, $phone, $bankaccount)==TRUE){
+        $hashedpassword = password_hash( $password, PASSWORD_BCRYPT );
+        $play = new UsersModel();
+        $ancestors = "";
+        $descendants = "";
+        $bronzevalue = 0;
+        $rank = "none";
+        if($play->addUser($username,$name,$hashedpassword,$sponsor,$ancestors,$descendants,$bronzevalue,$rank, $phone, $bankaccount)==TRUE){
             
-//             header('location: login.php');
-//         }else{
-//             $error = " Something went wrong, could not create user";
-//         }
-//     }else{
-//         //$error = " Fill all details";
-//     }
+            header('location: login');
+        }else{
+            $error = " Something went wrong, could not create user";
+        }
+    }else{
+        //$error = " Fill all details";
+    }
     $error = isset($_GET['error']) ? $_GET['error'] : null;
 ?>
 <!DOCTYPE html>
@@ -64,7 +64,7 @@
                             <div class="text-center">
                                 <h4 class="text-dark mb-4">Create an Account!</h4>
                             </div>
-                            <form class="user" method="POST" action="./scripts/register.scr.php">
+                            <form class="user" method="POST" action="">
                                 <div class="form-group"><input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Full Name" name="name" required></div>
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" placeholder="Username" name="username" required></div>

@@ -21,7 +21,7 @@ include_once('./models/ManagersModel.php');
         $role = 1;
         if($play->addManager($username,$name,$hashedpassword,$role,$description)==TRUE){
             
-            header('location: login.php');
+            header('location: login');
         }else{
             $error = " Something went wrong, could not create user";
         }
@@ -68,8 +68,8 @@ include_once('./models/ManagersModel.php');
                                 <hr>
                             </form>
                             <div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>
-                            <div class="text-center"><a class="small" href="register.php">Not an Admin? Register Regular User.</a></div>
-                            <div class="text-center"><a class="small" href="login.php">Already have an account? Login!</a></div>
+                            <div class="text-center"><a class="small" href="register">Not an Admin? Register Regular User.</a></div>
+                            <div class="text-center"><a class="small" href="login">Already have an account? Login!</a></div>
                         </div>
                     </div>
                 </div>

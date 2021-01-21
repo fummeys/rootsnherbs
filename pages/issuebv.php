@@ -4,16 +4,14 @@ include_once('./models/TransactionsModel.php');
 include_once('./models/UsersModel.php');
 include_once('./models/BonusesModel.php');
 include_once('./models/RanksModel.php');
-require 'vendor/autoload.php';
-$data = [
-    ['id' => 1, 'parent' => 0, 'title' => 'Node 1'],
-    ['id' => 2, 'parent' => 1, 'title' => 'Node 1.1'],
-    ['id' => 3, 'parent' => 0, 'title' => 'Node 3'],
-    ['id' => 4, 'parent' => 1, 'title' => 'Node 1.2'],
-];
-$tree = new BlueM\Tree($data);
-echo $tree->getNodeById(1)->countChildren();
+include_once('./controllers/RanknBonusController.php');
 
+require 'vendor/autoload.php';
+
+
+$testy = new RanknBonusController();
+$testy->grade(5,30);
+$testy->paybonuses(5,400);
 
 if (!isset($_POST['page'])){
     $page = 1;  
@@ -55,20 +53,12 @@ if(isset($_POST['id'])){
         $userid = $myuser['id'];
         $transactionid = $play->recordTransaction ($name,$issuer,$oldbv,$thisbv,$newbv,$description,$userid);
         if($transactionid!=FALSE){
-
             $play1->updateUserItembyID ($userid,'s','i','i','bronzevalue',$newbv);
-            ///
-            $ranker = new RanksModel();
-            $ranker->addRank($name, $userid ,$myuser['rank'] , 'general');
-            
-            $bonusmaker = new BonusesModel();
-            $transactionid = $transactionid->fetch_assoc()['LAST_INSERT_ID()'];
-            $bonusmaker->addBonus($name,$userid,$transactionid,$description,'registration bonus');
+            $mssg = " BV added";
+            header('location: issuebv');
 
-            //header('location: login.php');
-            $mssg = " Product added";
         }else{
-            $mssg = " Something went wrong, could not add products";
+            $mssg = " Something went wrong, could not add BV";
         }
     }
 }
@@ -97,12 +87,12 @@ if(isset($_POST['id'])){
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="dashboard.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="profile.php"><i class="fas fa-user"></i><span>Profile</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="issuebv.php"><i class="fas fa-table"></i><span>Issue Bronze Value</span></a><a class="nav-link" href="rank.php"><i class="fas fa-table"></i><span>Rank</span></a><a class="nav-link" href="bonuses.php"><i class="fas fa-table"></i><span>Bonuses</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="profile"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="issuebv"><i class="fas fa-table"></i><span>Issue Bronze Value</span></a><a class="nav-link" href="rank"><i class="fas fa-table"></i><span>Rank</span></a><a class="nav-link" href="bonuses"><i class="fas fa-table"></i><span>Bonuses</span></a></li>
                     <li
-                        class="nav-item" role="presentation"><a class="nav-link" href="login.php"><i class="far fa-user-circle"></i><span>Login</span></a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="register.php"><i class="fas fa-user-circle"></i><span>Register</span></a></li>
+                        class="nav-item" role="presentation"><a class="nav-link" href="login"><i class="far fa-user-circle"></i><span>Login</span></a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="register"><i class="fas fa-user-circle"></i><span>Register</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -196,7 +186,7 @@ if(isset($_POST['id'])){
                             </li>
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow" role="presentation">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small">Valerie Luna</span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-toggle="dropdown" aria-expanded="false" href="#"><span class="d-none d-lg-inline mr-2 text-gray-600 small"><?php echo $_SESSION["user"]; ?></span><img class="border rounded-circle img-profile" src="assets/img/avatars/avatar1.jpeg"></a>
                                     <div
                                         class="dropdown-menu shadow dropdown-menu-right animated--grow-in" role="menu"><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" role="presentation" href="#"><i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>&nbsp;Settings</a>
                                         <a
@@ -258,9 +248,14 @@ if(isset($_POST['id'])){
                             </div>
                             <div class="input-group">
                                 <div class="input-group-prepend"><span class="input-group-text">Description</span></div><input class="form-control" id = "usedesc"  name = "description" type="text">
+
                                 <div class="input-group-append"><input class="btn btn-primary" type="submit" name = "submit_bv" value = "GO!"></div>
                             </div>
+                            
                             </form>
+                            <?php if(!empty($mssg)){
+                                    echo '<div class="text-center" style="color:green">'.$mssg.'</div>';
+                                    } ?>
                         </div>
                         <div class="card-header py-3">
                             <p class="text-primary m-0 font-weight-bold">Bronze Value List</p>
@@ -272,7 +267,7 @@ if(isset($_POST['id'])){
                                 <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label>Show&nbsp;<select class="form-control form-control-sm custom-select custom-select-sm"><option value="10" selected="">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>&nbsp;</label></div>
                             </div>
                             <div class="col-md-6">
-                                <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
+                                <div class="text-md-right dataTables_filter" id="dataTable_filter"><label> <a href="users"><p class="text-primary m-0 font-weight-bold">View all Users</a> </p></label></div>
                             </div>
                         </div>
                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
@@ -312,7 +307,7 @@ if(isset($_POST['id'])){
                         </div>
                         <div class="row">
                             <div class="col-md-6 align-self-center">
-                                <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
+                                <!--<p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>-->
                             </div>
                             <div class="col-md-6">
                             <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
