@@ -1,17 +1,6 @@
 <?php
 session_start();
-include_once('./models/TransactionsModel.php');
 include_once('./models/UsersModel.php');
-include_once('./models/BonusesModel.php');
-include_once('./models/RanksModel.php');
-include_once('./controllers/RanknBonusController.php');
-
-require 'vendor/autoload.php';
-
-
-$testy = new RanknBonusController();
-$testy->grade(5,30);
-$testy->paybonuses(5,400);
 
 if (!isset($_POST['page'])){
     $page = 1;  
@@ -23,55 +12,22 @@ $results_per_page = 10;
 $page_first_result = ($page-1) * $results_per_page;  
 
 $page_first_result = ($page-1) * $results_per_page;
-$transactions = new TransactionsModel();
-$result = $transactions-> getAllTransactions();
+$users = new UsersModel();
+$result = $users-> getAllUsers();
 $number_of_result = mysqli_num_rows($result);  
-$sometransactions = $transactions->getSomeTransactions($page_first_result,$results_per_page);
+$someusers = $users->getSomeUsers($page_first_result,$results_per_page);
 //determine the total number of pages available  
 $number_of_page = ceil ($number_of_result / $results_per_page);
 
 
-if(isset( $_POST['submit_bv']) ) {
-if(isset($_POST['id'])){
-    $id = $_POST['id'];
-    }
-    if(isset($_POST['bv'])){
-    $bv = $_POST['bv'];
-    }
-    if(isset($_POST['description'])){
-    $description = $_POST['description'];
-    }
-    if(!empty($id)&&!empty($bv)&&!empty($description)){
-        $play = new TransactionsModel();
-        $play1 = new UsersModel();
-        $myuser = $play1-> getUserbyrealID($id)->fetch_assoc();
-        $oldbv = $myuser['bronzevalue'] ;
-        $newbv = $oldbv + $bv;
-        $thisbv = $bv;
-        $name = $myuser['name'];
-        $issuer = $_SESSION['id'];
-        $userid = $myuser['id'];
-        $transactionid = $play->recordTransaction ($name,$issuer,$oldbv,$thisbv,$newbv,$description,$userid);
-        if($transactionid!=FALSE){
-            $play1->updateUserItembyID ($userid,'s','i','i','bronzevalue',$newbv);
-            $mssg = " BV added";
-            header('location: issuebv.php');
-
-        }else{
-            $mssg = " Something went wrong, could not add BV";
-        }
-    }
-}
-
 ?>
-
 <!DOCTYPE html>
 <html>
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>BV -  Roots & Herbs</title>
+    <title>Users - Roots & Herbs</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
@@ -198,67 +154,15 @@ if(isset($_POST['id'])){
             </div>
             </nav>
             <div class="container-fluid">
-                <h3 class="text-dark mb-4">Issue Bronze Value</h3>
+                <h3 class="text-dark mb-4">Users</h3>
                 <div class="card shadow">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Give Bronze value</h4>
-                            <h6 class="text-muted card-subtitle mb-2">Assign BV to user</h6>
-                            <form>
-        <div>
-        <label >Products: </label>
-        <select name = "product" id = "product" class="form-control" >
-        <?php
-        include_once('./models/ProductsModel.php');
-        $products = new ProductsModel();
-        $myp = $products->getAllProducts();
-        //$productlist = $myp->fetch_assoc();
-        while ($row =  $myp->fetch_assoc()) { 
-            echo "<option  value ='".$row['bronzevalue']."'>".$row['productname']."</option>";
-       } 
-        
-        
-        ?>
-        </select>
-      </div>
-    	<input type="button" class="add-row" value="Add Product">
-    </form>
-    <table class="table my-0" id="dataTable">
-        <thead>
-            <tr>
-                <th>Select</th>
-                <th>Products</th>
-                <th>BV</th>
-            </tr>
-        </thead>
-        <tbody>
-            
-        </tbody>
-    </table>
-    <button type="button" class="delete-row">Delete Row</button>
-  <button type="button" class="show">Use Products to assign value</button>
-                            <form method = "POST">
-                            <div class="input-group">
-                                <div class="input-group-prepend"><span class="input-group-text">User ID</span></div><input class="form-control"  name = "id" type="text">
-                                <div class="input-group-append"></div>
-                            </div>
-                            <div class="input-group">
-                                <div class="input-group-prepend"><span class="input-group-text">Bronze Value</span></div><input class="form-control" id = "usebv" name = "bv"  type="text">
-                                <div class="input-group-append"></div>
-                            </div>
-                            <div class="input-group">
-                                <div class="input-group-prepend"><span class="input-group-text">Description</span></div><input class="form-control" id = "usedesc"  name = "description" type="text">
-
-                                <div class="input-group-append"><input class="btn btn-primary" type="submit" name = "submit_bv" value = "GO!"></div>
-                            </div>
-                            
-                            </form>
-                            <?php if(!empty($mssg)){
-                                    echo '<div class="text-center" style="color:green">'.$mssg.'</div>';
-                                    } ?>
+                            <h4 class="card-title">Users</h4>
+                            <h6 class="text-muted card-subtitle mb-2">Users overview</h6>
                         </div>
                         <div class="card-header py-3">
-                            <p class="text-primary m-0 font-weight-bold">Bronze Value List</p>
+                            <p class="text-primary m-0 font-weight-bold">User details list</p>
                         </div>
                     </div>
                     <div class="card-body">
@@ -267,47 +171,44 @@ if(isset($_POST['id'])){
                                 <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label>Show&nbsp;<select class="form-control form-control-sm custom-select custom-select-sm"><option value="10" selected="">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>&nbsp;</label></div>
                             </div>
                             <div class="col-md-6">
-                                <div class="text-md-right dataTables_filter" id="dataTable_filter"><label> <a href="users.php"><p class="text-primary m-0 font-weight-bold">View all Users</a> </p></label></div>
+                                <div class="text-md-right dataTables_filter" id="dataTable_filter"><label><input type="search" class="form-control form-control-sm" aria-controls="dataTable" placeholder="Search"></label></div>
                             </div>
                         </div>
                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
                             <table class="table my-0" id="dataTable">
                                 <thead>
                                     <tr>
-                                        <th>id</th>
+                                        <th>Distributor Id</th>
                                         <th>Name</th>
-                                        <th>Description</th>
-                                        <th>Old BV</th>
-                                        <th>ThisBV</th>
-                                        <th>NewBV</th>
-                                        <th>Date</th>
-                                        <th>Issuer</th>
+                                        <th>username</th>
+                                        <th>Bronze Value</th>
+                                        <th>Rank</th>
+                                        <th>Time Registered</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 <?php
-                                        while ($row = mysqli_fetch_array($sometransactions)) { 
+                                        while ($row = mysqli_fetch_array($someusers)) { 
         echo "<tr><td>".$row['id']."</td>";
-        echo "<td>".$row['name']."</td>"; 
-        echo "<td>".$row['description']."</td>";  
-        echo "<td>".$row['oldbv']."</td>";  
-        echo "<td>".$row['thisbv']."</td>";  
-        echo "<td>".$row['newbv']."</td>";  
-        echo "<td>".$row['transactiontime']."</td>";  
-        echo "<td>".$row['issuer']."</td></tr>";  
+        echo "<td><a class='nav-item' href = '".'profile.php'."'>".$row['name']."</a></td>"; 
+        echo "<td>".$row['username']."</td>";  
+        echo "<td>".$row['bronzevalue']."</td>";  
+        echo "<td>".$row['rank']."</td>";  
+        echo "<td>".$row['dateregistered']."</td></tr>";  
+
 
           
         
            }  
             ?>
-                                    
+                                   
                                 </tbody>
-                                
+                                   
                             </table>
                         </div>
                         <div class="row">
                             <div class="col-md-6 align-self-center">
-                                <!--<p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>-->
+                                <p id="dataTable_info" class="dataTables_info" role="status" aria-live="polite">Showing 1 to 10 of 27</p>
                             </div>
                             <div class="col-md-6">
                             <nav class="d-lg-flex justify-content-lg-end dataTables_paginate paging_simple_numbers">
@@ -343,46 +244,6 @@ if(isset($_POST['id'])){
     <script src="assets/js/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.js"></script>
     <script src="assets/js/script.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
-    <script>
-    $(document).ready(function(){
-        $(".add-row").click(function(){
-            var name = $("#product").find('option:selected').text();
-            var val = $("#product").val();
-            
-            var markup = "<tr><td><input type='checkbox' name='record'></td><td class = 'desc' >" + name + "</td><td class = 'bv'>" + val + "</td></tr>";
-            $("table tbody:first").append(markup);
-        });
-        
-        // Find and remove selected table rows
-        $(".delete-row").click(function(){
-            $("table tbody:first").find('input[name="record"]').each(function(){
-            	if($(this).is(":checked")){
-                    $(this).parents("tr").remove();
-                }
-            });
-        });
-    });
-       $(".show").click(function(){
-         var content = 0;
-            $("table tbody:first").find(".bv").each(function(){
-            	
-                    content += Number($(this).text());
-                
-            });
-            $("#usebv").val(content);
-            var content1 = "";
-            $("table tbody:first").find(".desc").each(function(){
-            	
-                    content1 += $(this).text()+' |';
-                
-            });
-            $("#usedesc").val(content1);
-          
-        });
-        
-</script>
 </body>
 
 </html>

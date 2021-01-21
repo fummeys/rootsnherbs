@@ -41,7 +41,7 @@ class ProductsModel {
     }
     function getSomeProducts ($page_first_result,$results_per_page){
         global $conn;
-        $sql_getTransactions = "SELECT * FROM products LIMIT  ?, ?";
+        $sql_getTransactions = "SELECT * FROM products ORDER BY id DESC LIMIT  ?, ?";
         $statement_getTransactions = $conn->prepare($sql_getTransactions);
         $statement_getTransactions->bind_param("ii",$page_first_result,$results_per_page);
         $statement_getTransactions->execute();

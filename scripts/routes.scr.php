@@ -37,6 +37,9 @@ Routes::set('/bonuses.php', function(){
 Routes::set('/issuebv.php', function(){
     ControllerRoutes::RenderPage('issuebv');
 });
+Routes::set('/users.php', function(){
+    ControllerRoutes::RenderPage('users');
+});
 
 Routes::set('404', function(){
     ControllerRoutes::RenderPage('404');

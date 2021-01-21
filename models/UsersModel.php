@@ -8,7 +8,7 @@ class UsersModel {
     function addUser ($username,$name,$password,$sponsor,$ancestors,$descendants,$bronzevalue,$rank, $phone, $bankaccount){
         global $conn;
         
-        $sql_putTransactions =  "INSERT INTO `users`(`username`, `name`, `password`, `sponsor`, `ancestors`, `descendants`, `bronzevalue`, `rank`, `phone`, `bankaccount`) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        $sql_putTransactions =  "INSERT INTO `users`(`username`, `name`, `password`, `parent`, `ancestors`, `descendants`, `bronzevalue`, `rank`, `phone`, `bankaccount`) VALUES (?,?,?,?,?,?,?,?,?,?)";
 
         $statement_putTransactions = $conn->prepare($sql_putTransactions);
         echo $conn->error;
@@ -26,10 +26,24 @@ class UsersModel {
         $conn->close();
     }
 
+
     function getAllUsers (){
         global $conn;
         $sql_getTransactions = "SELECT * FROM `users`";
         $statement_getTransactions = $conn->prepare($sql_getTransactions);
+        $statement_getTransactions->execute();
+        $allTransactions = $statement_getTransactions->get_result();
+    
+        return $allTransactions;
+        
+        $statement_getTransactions->close();
+        $conn->close();
+    }
+    function getSomeUsers ($page_first_result,$results_per_page){
+        global $conn;
+        $sql_getTransactions = "SELECT * FROM users ORDER BY id DESC LIMIT  ?, ?";
+        $statement_getTransactions = $conn->prepare($sql_getTransactions);
+        $statement_getTransactions->bind_param("ii",$page_first_result,$results_per_page);
         $statement_getTransactions->execute();
         $allTransactions = $statement_getTransactions->get_result();
     
@@ -67,7 +81,7 @@ class UsersModel {
     function updateUserbyID ($id,$username,$name,$password,$sponsor,$ancestors,$descendants,$bronzevalue,$rank, $phone, $bankaccount){
         global $conn;
         $sql_putTransactions =
-        "UPDATE `users` SET `username`=?,`name`=?,`password`=?,`sponsor`=?,`ancestors`=?,`descendants`=?,`bronzevalue`=?,`rank`=?,`phone`=?,`bankaccount`=?,`dateregistered`=?  WHERE `id` = '?'";
+        "UPDATE `users` SET `username`=?,`name`=?,`password`=?,`parent`=?,`ancestors`=?,`descendants`=?,`bronzevalue`=?,`rank`=?,`phone`=?,`bankaccount`=?,`dateregistered`=?  WHERE `id` = '?'";
         $statement_putTransactions = $conn->prepare($sql_putTransactions);
         echo $conn->error;
         $statement_putTransactions->bind_param("sssisisssi",$username,$name,$password,$sponsor,$ancestors,$descendants,$bronzevalue,$rank, $phone, $bankaccount);
