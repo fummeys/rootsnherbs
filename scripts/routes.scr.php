@@ -8,33 +8,38 @@ Routes::set('/', function(){
 });
 
 
-Routes::set('index.php', function(){
+Routes::set('index', function(){
     ControllerRoutes::RenderPage('index');
 });
-Routes::set('/login.php', function(){
+Routes::set('login', function(){
     ControllerRoutes::RenderPage('login');
 });
-Routes::set('/profile.php', function(){
+Routes::set('profile', function(){
     ControllerRoutes::RenderPage('profile');
 });
-Routes::set('/registeradmin.php', function(){
+Routes::set('registeradmin', function(){
     ControllerRoutes::RenderPage('registeradmin');
 });
-Routes::set('/register.php', function(){
+Routes::set('register', function(){
     ControllerRoutes::RenderPage('register');
 });
-Routes::set('/rank.php', function(){
+Routes::set('rank', function(){
     ControllerRoutes::RenderPage('rank');
 });
-Routes::set('/dashboard.php', function(){
+Routes::set('dashboard', function(){
     ControllerRoutes::RenderPage('dashboard');
 });
 
+Routes::set('forgot-password', function(){
+    ControllerRoutes::RenderPage('forgot-password');
+});
 
-Routes::set('/bonuses.php', function(){
+
+
+Routes::set('bonuses', function(){
     ControllerRoutes::RenderPage('bonuses');
 });
-Routes::set('/issuebv.php', function(){
+Routes::set('issuebv', function(){
     ControllerRoutes::RenderPage('issuebv');
 });
 
@@ -42,12 +47,3 @@ Routes::set('404', function(){
     ControllerRoutes::RenderPage('404');
 });
 
-
-Routes::set('login', function(){
-    ControllerRoutes::RenderPage('login');
-});
-
-
-Routes::set('register', function(){
-    ControllerRoutes::RenderPage('register');
-});

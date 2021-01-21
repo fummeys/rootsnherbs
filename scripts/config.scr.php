@@ -5,9 +5,6 @@
 // $password = "";
 // $dbname ="";
 
-//request uri
-    // $uri = $_SERVER["REQUEST_URI"];
-    $uri = $_GET['url'];
 
 // dbconfiguration offline
     $servername = "localhost";

@@ -1,18 +1,18 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-include_once('./scripts/config.scr.php');
+// include_once('scripts/config.scr.php');
 
 class UsersModel {
 
-    function addUser ($username,$name,$password,$sponsor,$ancestors,$descendants,$bronzevalue,$rank, $phone, $bankaccount){
+    function addUser ($username,$name,$password,$sponsor,$parent, $phone, $bankaccount){
         global $conn;
         
-        $sql_putTransactions =  "INSERT INTO `users`(`username`, `name`, `password`, `sponsor`, `ancestors`, `descendants`, `bronzevalue`, `rank`, `phone`, `bankaccount`) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        $sql_putTransactions =  "INSERT INTO `users`(`username`, `name`, `password`, `sponsor`, `parent`, `phone`, `bankaccount`) VALUES (?,?,?,?,?,?,?)";
 
         $statement_putTransactions = $conn->prepare($sql_putTransactions);
         echo $conn->error;
-        $statement_putTransactions->bind_param("sssisisssi",$username,$name,$password,$sponsor,$ancestors,$descendants,$bronzevalue,$rank, $phone, $bankaccount);
+        $statement_putTransactions->bind_param("sssiiii",$username,$name,$password,$sponsor,$parent, $phone, $bankaccount);
         if($statement_putTransactions->execute()==TRUE){
            
             return TRUE;
@@ -48,7 +48,7 @@ class UsersModel {
     
         return $allTransactions;
         
-        $statement_getTransactions->close();
+        $statement_putTransactions->close();
         $conn->close();
     }
     function getUserbyrealID ($id){
@@ -61,7 +61,7 @@ class UsersModel {
     
         return $allTransactions;
         
-        $statement_getTransactions->close();
+        $statement_putTransactions->close();
         $conn->close();
     }
     function updateUserbyID ($id,$username,$name,$password,$sponsor,$ancestors,$descendants,$bronzevalue,$rank, $phone, $bankaccount){

@@ -1,4 +1,9 @@
 <?php
+
+//request uri
+    // $uri = $_SERVER["REQUEST_URI"];
+    $uri = $_GET['url'];
+
 include_once('./scripts/config.scr.php');
 include_once('./classes/ClassRoutes.php');
 include_once('./controllers/controllerUser.php');

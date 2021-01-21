@@ -54,7 +54,7 @@ if(!empty($username)&&!empty($password)){
 
         $_SESSION["user"] = $thisuser['name'];
         $_SESSION["id"] = $thisuser['id'];
-        header('location: dashboard.php');
+        header('location: ./dashboard');
     }else{
         $play1 = new UsersModel();
         $user = $play1->getUserbyID($username);
@@ -65,7 +65,7 @@ if(!empty($username)&&!empty($password)){
             $_SESSION["user"] = $thisuser['name'];
             $_SESSION["id"] = $thisuser['id'];
             //echo $_SESSION["user"]->fetch_assoc()['name'];
-            header('location: profile.php');
+            header('location: ./profile');
         }else{
         $error = "Please enter a valid Username and password ";
         }
@@ -115,8 +115,8 @@ if(!empty($username)&&!empty($password)){
                                     }
                                    ?>
 
-                                    <div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>
-                                    <div class="text-center"><a class="small" href="register.php">Create an Account!</a></div>
+                                    <div class="text-center"><a class="small" href="forgot-password">Forgot Password?</a></div>
+                                    <div class="text-center"><a class="small" href="register">Create an Account!</a></div>
                                 </div>
                             </div>
                         </div>
