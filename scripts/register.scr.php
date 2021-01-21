@@ -29,5 +29,4 @@ if($register){
     header('location: ../login');
 }else{
     header('location: ../register?error=Something went wrong, could not create user');
-    $error = " Something went wrong, could not create user";
 }

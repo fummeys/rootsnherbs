@@ -37,6 +37,7 @@
 //     }else{
 //         //$error = " Fill all details";
 //     }
+    $error = isset($_GET['error']) ? $_GET['error'] : null;
 ?>
 <!DOCTYPE html>
 <html>
@@ -79,7 +80,7 @@
                                 </div><button id="submit-btn" class="btn btn-primary btn-block text-white btn-user" type="submit" disabled>Register Account</button>
                                 <hr>
                             </form>
-                            <div class="col-sm-6 mb-3 mb-sm-0" style="display: contents;"><p class="text-center" id="password-reply">message</p></div>
+                            <div class="col-sm-6 mb-3 mb-sm-0" style="display: contents;"><p class="text-center" id="password-reply"></p></div>
                             <?php
                                     if(!empty($error)){
                                     echo '<div class="text-center" style="color:red">'.$error.'</div>';
