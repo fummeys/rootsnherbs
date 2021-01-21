@@ -30,13 +30,14 @@ include_once('./models/UsersModel.php');
         $rank = "none";
         if($play->addUser($username,$name,$hashedpassword,$sponsor,$ancestors,$descendants,$bronzevalue,$rank, $phone, $bankaccount)==TRUE){
             
-            header('location: login.php');
+            header('location: login');
         }else{
             $error = " Something went wrong, could not create user";
         }
     }else{
         //$error = " Fill all details";
     }
+    $error = isset($_GET['error']) ? $_GET['error'] : null;
 ?>
 <!DOCTYPE html>
 <html>
@@ -63,36 +64,58 @@ include_once('./models/UsersModel.php');
                             <div class="text-center">
                                 <h4 class="text-dark mb-4">Create an Account!</h4>
                             </div>
-                            <form class="user" method = "POST">
-                                <div class="form-group"><input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Full Name" name="name"></div>
+                            <form class="user" method="POST" action="">
+                                <div class="form-group"><input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Full Name" name="name" required></div>
                                 <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" id="exampleFirstName" placeholder="Username" name="username"></div>
-                                    <div class="col-sm-6"><input class="form-control form-control-user" type="text" id="exampleFirstName" placeholder="Sponsor ID" name="sponsorid"></div>
+                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" placeholder="Username" name="username" required></div>
+                                    <div class="col-sm-6"><input class="form-control form-control-user" type="text" placeholder="Sponsor ID" name="sponsorid"></div>
                                 </div>
                                 <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" id="exampleFirstName" placeholder="Phone number" name="phone"></div>
-                                    <div class="col-sm-6"><input class="form-control form-control-user" type="text" id="exampleFirstName" placeholder="Account Number" name="accountnumber"></div>
+                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" placeholder="Phone number" name="phone" required></div>
+                                    <div class="col-sm-6"><input class="form-control form-control-user" type="text" placeholder="Account Number" name="accountnumber" required></div>
                                 </div>
                                 <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="password" id="examplePasswordInput" placeholder="Password" name="password"></div>
-                                    <div class="col-sm-6"><input class="form-control form-control-user" type="password" id="exampleRepeatPasswordInput" placeholder="Repeat Password" name="password_repeat"></div>
-                                </div><button class="btn btn-primary btn-block text-white btn-user" type="submit">Register Account</button>
+                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="password" id="password" placeholder="Password" name="password" onmouseout="checkpassword();" required></div>
+                                    <div class="col-sm-6"><input class="form-control form-control-user" type="password" id="re-password" placeholder="Repeat Password" name="password_repeat" onmouseout="checkpassword();" required></div>
+                                </div><button id="submit-btn" class="btn btn-primary btn-block text-white btn-user" type="submit" disabled>Register Account</button>
                                 <hr>
                             </form>
+                            <div class="col-sm-6 mb-3 mb-sm-0" style="display: contents;"><p class="text-center" id="password-reply"></p></div>
                             <?php
                                     if(!empty($error)){
                                     echo '<div class="text-center" style="color:red">'.$error.'</div>';
                                     }
                                    ?>
-                            <div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>
-                            <div class="text-center"><a class="small" href="registeradmin.php">Not an regular user? Create an Admin Account.</a></div>
-                            <div class="text-center"><a class="small" href="login.php">Already have an account? Login!</a></div>
+                            <div class="text-center"><a class="small" href="forgot-password">Forgot Password?</a></div>
+                            <div class="text-center"><a class="small" href="registeradmin">Not an regular user? Create an Admin Account.</a></div>
+                            <div class="text-center"><a class="small" href="login">Already have an account? Login!</a></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        function checkpassword() {
+            let pass = document.getElementById('password').value;
+            let repass = document.getElementById('re-password').value;
+            let reply = document.getElementById('password-reply');
+            let button = document.getElementById('submit-btn');
+            if (pass.length < 6 ) {
+                reply.innerHTML = 'password is too short';
+                reply.style.color = 'red';
+            } else if (pass === repass & pass != '' ) {
+                reply.innerHTML = 'password match';   
+                reply.style.color = 'green'; 
+                button.removeAttribute('disabled');            
+            } else {
+                reply.innerHTML = 'password does not match';
+                reply.style.color = 'red';
+            }
+            console.log(pass);
+            console.log(repass);
+        }
+    </script>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/chart.min.js"></script>

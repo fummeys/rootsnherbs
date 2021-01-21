@@ -11,6 +11,10 @@
     </header>
     <main>
         <h1>this is 404 page</h1>
+        <!-- this is why it wasn't working -->
+        <?php echo($_SERVER["REQUEST_URI"]);?>
+        <br>
+        <?php echo($_GET['url']);?>
     </main>
     <footer>
 

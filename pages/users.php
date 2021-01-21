@@ -190,7 +190,7 @@ $number_of_page = ceil ($number_of_result / $results_per_page);
                                 <?php
                                         while ($row = mysqli_fetch_array($someusers)) { 
         echo "<tr><td>".$row['id']."</td>";
-        echo "<td><a class='nav-item' href = '".'profile.php'."'>".$row['name']."</a></td>"; 
+        echo "<td><a class='nav-item' href = '".'profile'."'>".$row['name']."</a></td>"; 
         echo "<td>".$row['username']."</td>";  
         echo "<td>".$row['bronzevalue']."</td>";  
         echo "<td>".$row['rank']."</td>";  

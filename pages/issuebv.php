@@ -55,7 +55,7 @@ if(isset($_POST['id'])){
         if($transactionid!=FALSE){
             $play1->updateUserItembyID ($userid,'s','i','i','bronzevalue',$newbv);
             $mssg = " BV added";
-            header('location: issuebv.php');
+            header('location: issuebv');
 
         }else{
             $mssg = " Something went wrong, could not add BV";
@@ -87,12 +87,12 @@ if(isset($_POST['id'])){
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="dashboard.php"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="profile.php"><i class="fas fa-user"></i><span>Profile</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="issuebv.php"><i class="fas fa-table"></i><span>Issue Bronze Value</span></a><a class="nav-link" href="rank.php"><i class="fas fa-table"></i><span>Rank</span></a><a class="nav-link" href="bonuses.php"><i class="fas fa-table"></i><span>Bonuses</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="profile"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    <li class="nav-item" role="presentation"><a class="nav-link" href="issuebv"><i class="fas fa-table"></i><span>Issue Bronze Value</span></a><a class="nav-link" href="rank"><i class="fas fa-table"></i><span>Rank</span></a><a class="nav-link" href="bonuses"><i class="fas fa-table"></i><span>Bonuses</span></a></li>
                     <li
-                        class="nav-item" role="presentation"><a class="nav-link" href="login.php"><i class="far fa-user-circle"></i><span>Login</span></a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="register.php"><i class="fas fa-user-circle"></i><span>Register</span></a></li>
+                        class="nav-item" role="presentation"><a class="nav-link" href="login"><i class="far fa-user-circle"></i><span>Login</span></a></li>
+                        <li class="nav-item" role="presentation"><a class="nav-link" href="register"><i class="fas fa-user-circle"></i><span>Register</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -267,7 +267,7 @@ if(isset($_POST['id'])){
                                 <div id="dataTable_length" class="dataTables_length" aria-controls="dataTable"><label>Show&nbsp;<select class="form-control form-control-sm custom-select custom-select-sm"><option value="10" selected="">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select>&nbsp;</label></div>
                             </div>
                             <div class="col-md-6">
-                                <div class="text-md-right dataTables_filter" id="dataTable_filter"><label> <a href="users.php"><p class="text-primary m-0 font-weight-bold">View all Users</a> </p></label></div>
+                                <div class="text-md-right dataTables_filter" id="dataTable_filter"><label> <a href="users"><p class="text-primary m-0 font-weight-bold">View all Users</a> </p></label></div>
                             </div>
                         </div>
                         <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
