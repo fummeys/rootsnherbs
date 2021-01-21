@@ -1,13 +1,10 @@
-<?php
-session_start();
-?>
 <!DOCTYPE html>
 <?php
-include_once('./models/TransactionsModel.php');
-include_once('./models/UsersModel.php');
+ include_once('./models/TransactionsModel.php');
+ include_once('./models/UsersModel.php');
 include_once('./models/ManagersModel.php');
 
-/*
+
 
 $play = new TransactionsModel();
 $id = 1;
@@ -35,7 +32,7 @@ $play2 = new ManagersModel();
 
 //$play2->addManager($username,$name,$password,$role,$description);
 //$play1->addUser($username,$name,$hashedpassword,$sponsor,$ancestors,$descendants,$bronzevalue,$rank, $phone, $bankaccount);
-*/
+
 
 if(isset($_POST['username'])){
 $username = $_POST['username'];
@@ -70,8 +67,9 @@ if(!empty($username)&&!empty($password)){
         $error = "Please enter a valid Username and password ";
         }
     }
-    //header('location: dashboard.php');
+    header('location: dashboard');
 }
+$error = $_GET['error'];
 ?>
 <html>
 
@@ -99,9 +97,9 @@ if(!empty($username)&&!empty($password)){
                                     <div class="text-center">
                                         <h4 class="text-dark mb-4">Welcome Back!</h4>
                                     </div>
-                                    <form class="user" method = "POST">
-                                        <div class="form-group"><input class="form-control form-control-user" type="name" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter your Username..." name="username"></div>
-                                        <div class="form-group"><input class="form-control form-control-user" type="password" id="exampleInputPassword" placeholder="Password" name="password"></div>
+                                    <form class="user" method = "POST" action="./scripts/login.scr.php">
+                                        <div class="form-group"><input class="form-control form-control-user" type="name" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter your Username..." name="username" required></div>
+                                        <div class="form-group"><input class="form-control form-control-user" type="password" id="exampleInputPassword" placeholder="Password" name="password" required></div>
                                         <div class="form-group">
                                             <div class="custom-control custom-checkbox small">
                                                 <div class="form-check"><input class="form-check-input custom-control-input" type="checkbox" id="formCheck-1"><label class="form-check-label custom-control-label" for="formCheck-1">Remember Me</label></div>
