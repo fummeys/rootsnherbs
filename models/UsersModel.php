@@ -7,21 +7,30 @@ class UsersModel {
 
     function addUser ($username,$name,$password,$sponsor,$parent, $phone, $bankaccount){
         global $conn;
-        
-        $sql_putTransactions =  "INSERT INTO `users`(`username`, `name`, `password`, `sponsor`, `parent`, `phone`, `bankaccount`) VALUES (?,?,?,?,?,?,?)";
+        $sql_getTransactions = "SELECT * FROM `users` WHERE `username` = ?";
+        $statement_getTransactions = $conn->prepare($sql_getTransactions);
+        $statement_getTransactions->bind_param("s", $username);
+        $results = $statement_getTransactions->get_result();
 
-        $statement_putTransactions = $conn->prepare($sql_putTransactions);
-        echo $conn->error;
-        $statement_putTransactions->bind_param("sssiiii",$username,$name,$password,$sponsor,$parent, $phone, $bankaccount);
-        if($statement_putTransactions->execute()==TRUE){
-           
-            return TRUE;
-        }else{
+        if ($results->num_rows > 0) {
             return FALSE;
+        } else {
+            $sql_putTransactions =  "INSERT INTO `users`(`username`, `name`, `password`, `sponsor`, `parent`, `phone`, `bankaccount`) VALUES (?,?,?,?,?,?,?)";
+
+            $statement_putTransactions = $conn->prepare($sql_putTransactions);
+            echo $conn->error;
+            $statement_putTransactions->bind_param("sssiiii",$username,$name,$password,$sponsor,$parent, $phone, $bankaccount);
+            if($statement_putTransactions->execute()==TRUE){
+            
+                return TRUE;
+            }else{
+                return FALSE;
+            }
+            $statement_putTransactions->free_result();
+            $statement_putTransactions->close();
         }
-        $statement_putTransactions->free_result();
-        $statement_putTransactions->close();
         
+
        
         $conn->close();
     }
@@ -64,6 +73,9 @@ class UsersModel {
         $statement_putTransactions->close();
         $conn->close();
     }
+
+
+     // this function updateUserbyID() will not work needs fix
     function updateUserbyID ($id,$username,$name,$password,$sponsor,$ancestors,$descendants,$bronzevalue,$rank, $phone, $bankaccount){
         global $conn;
         $sql_putTransactions =
@@ -82,6 +94,8 @@ class UsersModel {
         $statement_putTransactions->close();
         $conn->close();
     }
+
+    // this function updateUserItembyID() will not work needs fix
     function updateUserItembyID ($id,$type1,$type2,$type3,$title,$data){
         global $conn;
         $sql_putTransactions =

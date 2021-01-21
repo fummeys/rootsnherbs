@@ -1,5 +1,5 @@
 <?php
-
+session_start();
 //request uri
     // $uri = $_SERVER["REQUEST_URI"];
     $uri = $_GET['url'];

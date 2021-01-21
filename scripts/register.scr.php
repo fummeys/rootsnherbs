@@ -11,7 +11,7 @@ $username = $_POST['username'];
 // $sponsor = isset($_POST['sponsorid']) ? $_POST['sponsorid'] : null;
 $phone = $_POST['phone'];
 $bankaccount = $_POST['accountnumber'];
-$password = $_POST['password'];
+$password = password_hash($_POST['password'], PASSWORD_BCRYPT);
 $parent = null;
 if ($_POST['sponsorid'] == '') {
     $sponsor = null;
@@ -19,7 +19,7 @@ if ($_POST['sponsorid'] == '') {
     $sponsor = $_POST['sponsorid'];
 }
 
-print_r($_POST);
+// print_r($_POST);
 
 $register = $userModel->addUser($username, $name, $password, $sponsor, $parent, $phone, $bankaccount);
 
