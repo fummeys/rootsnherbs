@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 17, 2021 at 04:03 PM
+-- Generation Time: Jan 21, 2021 at 10:58 PM
 -- Server version: 10.4.13-MariaDB
 -- PHP Version: 7.4.8
 
@@ -32,15 +32,22 @@ CREATE TABLE `users` (
   `username` varchar(50) NOT NULL,
   `name` varchar(150) NOT NULL,
   `password` text NOT NULL,
-  `sponsor` bigint(20) NOT NULL,
-  `ancestors` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`ancestors`)),
-  `descendants` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`descendants`)),
-  `bronzevalue` int(11) NOT NULL,
-  `rank` varchar(50) NOT NULL,
+  `sponsor` bigint(20) DEFAULT NULL,
+  `parent` bigint(20) DEFAULT NULL,
+  `descendants` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `bronzevalue` int(11) DEFAULT NULL,
+  `rank` varchar(50) DEFAULT NULL,
   `phone` varchar(20) NOT NULL,
   `bankaccount` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`bankaccount`)),
   `dateregistered` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `name`, `password`, `sponsor`, `parent`, `descendants`, `bronzevalue`, `rank`, `phone`, `bankaccount`, `dateregistered`) VALUES
+(8, 'Remmy', 'Fummey samuel', '$2y$10$e2kH369Erotsq2iBsg3bveVn/MQD9wjODywH.M3cHssyqhp4.BhV2', NULL, NULL, NULL, NULL, NULL, '08164907837', '123456789', '2021-01-21 21:14:07');
 
 --
 -- Indexes for dumped tables
@@ -61,7 +68,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
