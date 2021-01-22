@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 include_once('./models/ProductsModel.php');
 include_once('./models/UsersModel.php');
 include_once('./models/BonusesModel.php');

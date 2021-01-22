@@ -1,5 +1,5 @@
 <?php
-session_start();
+//session_start();
 include_once('./models/UsersModel.php');
 
 if (!isset($_POST['page'])){
