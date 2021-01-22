@@ -1,16 +1,19 @@
 <?php
-<<<<<<< HEAD
-//session_start();
-=======
->>>>>>> a2ab1f1bc411aed16660686783dd25ed1bfcde7a
 include_once('./models/ProductsModel.php');
 include_once('./models/UsersModel.php');
 include_once('./models/BonusesModel.php');
 
 
 $play1 = new UsersModel();
-$id = $_SESSION['user'];
-$user = $play1->getUserbyrealID($id);
+$id = $_SESSION['id'];
+
+if(isset($_REQUEST['id'])){
+    $userid = $_REQUEST['id'];
+    }else{
+    $userid = $id;   
+    }
+    
+$user = $play1->getUserbyrealID($userid);
 $thisuser = $user->fetch_assoc();
 
 if (!isset($_POST['page'])){
@@ -18,11 +21,7 @@ if (!isset($_POST['page'])){
 } else {  
     $page = $_POST['page'];  
 }  
-if(isset($_REQUEST['id'])){
-$userid = $_REQUEST['id'];
-}else{
-    $userid = $id;   
-}
+
 $results_per_page = 10;  
 $page_first_result = ($page-1) * $results_per_page;  
 
@@ -95,21 +94,12 @@ if(isset($_POST['submit_data'])) {
                 </a>
                 <hr class="sidebar-divider my-0">
                 <ul class="nav navbar-nav text-light" id="accordionSidebar">
-<<<<<<< HEAD
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="./dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link active" href="./profile"><i class="fas fa-user"></i><span>Profile</span></a></li>
-                    <li class="nav-item" role="presentation"><a class="nav-link" href="./issuebv"><i class="fas fa-table"></i><span>Issue Bronze Value</span></a><a class="nav-link" href="./rank"><i class="fas fa-table"></i><span>Rank</span></a><a class="nav-link" href="./bonuses"><i class="fas fa-table"></i><span>Bonuses</span></a></li>
-                    <li
-                        class="nav-item" role="presentation"><a class="nav-link" href="./login"><i class="far fa-user-circle"></i><span>Login</span></a></li>
-                        <li class="nav-item" role="presentation"><a class="nav-link" href="./register"><i class="fas fa-user-circle"></i><span>Register</span></a></li>
-=======
                     <li class="nav-item" role="presentation"><a class="nav-link" href="dashboard"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link active" href="profile"><i class="fas fa-user"></i><span>Profile</span></a></li>
                     <li class="nav-item" role="presentation"><a class="nav-link" href="issuebv"><i class="fas fa-table"></i><span>Issue Bronze Value</span></a><a class="nav-link" href="rank"><i class="fas fa-table"></i><span>Rank</span></a><a class="nav-link" href="bonuses"><i class="fas fa-table"></i><span>Bonuses</span></a></li>
                     <li
                         class="nav-item" role="presentation"><a class="nav-link" href="login"><i class="far fa-user-circle"></i><span>Login</span></a></li>
                         <li class="nav-item" role="presentation"><a class="nav-link" href="register"><i class="fas fa-user-circle"></i><span>Register</span></a></li>
->>>>>>> 82111fca4f84db1d5109b248521fc5f0f4a50a18
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -274,15 +264,15 @@ if(isset($_POST['submit_data'])) {
                                         <form method = "POST">
                                             <div class="form-row">
                                                 <div class="col">
-                                                    <div class="form-group"><label for="username"><strong>Name</strong></label><input class="form-control" type="text" placeholder="user.name" value = "<?php echo $thisuser['name']; ?>" name="name"></div>
+                                                    <div class="form-group"><label for="username"><strong>Name</strong></label><input class="form-control" type="text" placeholder="Fullname" value = "<?php echo $thisuser['name']; ?>" name="name"></div>
                                                 </div>
                                                 <div class="col">
-                                                    <div class="form-group"><label for="email"><strong>Phone</strong><br></label><input class="form-control" type="text" placeholder="user@example.com" name="phone" value = "<?php echo $thisuser['phone']; ?>"></div>
+                                                    <div class="form-group"><label for="email"><strong>Phone</strong><br></label><input class="form-control" type="text" placeholder="Phone number" name="phone" value = "<?php echo $thisuser['phone']; ?>"></div>
                                                 </div>
                                             </div>
                                             <div class="form-row">
                                                 <div class="col">
-                                                    <div class="form-group"><label for="first_name"><strong>Account number</strong></label><input class="form-control" type="text" placeholder="123455" name="bankaccount" value = "<?php echo $thisuser['bankaccount']; ?>"></div>
+                                                    <div class="form-group"><label for="first_name"><strong>Account number</strong></label><input class="form-control" type="text" placeholder="Account number" name="bankaccount" value = "<?php echo $thisuser['bankaccount']; ?>"></div>
                                                 </div>
                                                <!-- <div class="col">
                                                     <div class="form-group"><label for="last_name"><strong>Last Name</strong></label><input class="form-control" type="text" placeholder="Doe" name="last_name"></div>

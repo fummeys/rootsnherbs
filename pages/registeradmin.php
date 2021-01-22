@@ -57,16 +57,22 @@ include_once('./models/ManagersModel.php');
                             <form class="user" method = "POST">
                             <div class="form-group"><input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Full Name" name="name"></div>
                                 <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" id="exampleFirstName" placeholder="Username" name="username"></div>
+                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text"  onblur = "checkusername()" id = "username" placeholder="Username" name="username"></div>
                                     <div class="col-sm-6"><input class="form-control form-control-user" type="text" id="exampleFirstName" placeholder="Department" name="description"></div>
                                 </div>
                                 
                                 <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="password" id="examplePasswordInput" placeholder="Password" name="password"></div>
-                                    <div class="col-sm-6"><input class="form-control form-control-user" type="password" id="exampleRepeatPasswordInput" placeholder="Repeat Password" name="password_repeat"></div>
+                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="password" id="password" placeholder="Password" name="password" onmouseout="checkpassword();" required></div>
+                                    <div class="col-sm-6"><input class="form-control form-control-user" type="password" id="re-password" placeholder="Repeat Password" name="password_repeat" onmouseout="checkpassword();" required></div>
                                 </div><button class="btn btn-primary btn-block text-white btn-user" type="submit">Register Account</button>
                                 <hr>
                             </form>
+                            <div class="col-sm-6 mb-3 mb-sm-0" style="display: contents;"><p> <span  id="txtHint"></span></p><p class="text-center" id="password-reply"></p></div>
+                            <?php
+                                    if(!empty($error)){
+                                    echo '<div class="text-center" style="color:red">'.$error.'</div>';
+                                    }
+                                   ?>
                             <div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>
                             <div class="text-center"><a class="small" href="register">Not an Admin? Register Regular User.</a></div>
                             <div class="text-center"><a class="small" href="login">Already have an account? Login!</a></div>
@@ -76,6 +82,45 @@ include_once('./models/ManagersModel.php');
             </div>
         </div>
     </div>
+    
+    <script>
+
+        function checkusername() {
+            let username = document.getElementById('username').value;
+            var xhttp;
+            if (username.length == 0) { 
+                document.getElementById("txtHint").innerHTML = "";
+                return;
+            }
+            xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                document.getElementById("txtHint").innerHTML = this.responseText;
+                }
+            };
+            xhttp.open("GET", "getname?username="+username, true);
+            xhttp.send();   
+        }
+        function checkpassword() {
+            let pass = document.getElementById('password').value;
+            let repass = document.getElementById('re-password').value;
+            let reply = document.getElementById('password-reply');
+            let button = document.getElementById('submit-btn');
+            if (pass.length < 6 ) {
+                reply.innerHTML = 'password is too short';
+                reply.style.color = 'red';
+            } else if (pass === repass & pass != '' ) {
+                reply.innerHTML = 'password match';   
+                reply.style.color = 'green'; 
+                button.removeAttribute('disabled');            
+            } else {
+                reply.innerHTML = 'password does not match';
+                reply.style.color = 'red';
+            }
+            console.log(pass);
+            console.log(repass);
+        }
+    </script>
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/chart.min.js"></script>

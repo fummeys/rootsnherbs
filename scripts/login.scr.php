@@ -1,6 +1,8 @@
 <?php
 
 include_once('../models/UsersModel.php');
+include_once('../models/ManagersModel.php');
+
 
 include_once('./config.scr.php');
 
@@ -19,11 +21,24 @@ if ($user_verify->num_rows > 0) {
     $password_check = password_verify($password, $user_details['password']);
     if ($password_check) {
         session_start();
-        $_SESSION['user'] = $user_details['id'];
+        $_SESSION['user'] = $user_details['name'];
+        $_SESSION["id"] = $user_details['id'];
         header('location: ../profile');
     } else {
+    $play2 = new ManagersModel();
+    $user = $play2->getManagerbyID($username);
+    $thisuser = $user->fetch_assoc();
+    if($user->num_rows>0 && password_verify($password,$thisuser['password'])){
+        session_start();
+
+        $_SESSION["user"] = $thisuser['name'];
+        $_SESSION["id"] = $thisuser['id'];
+        header('location: ../dashboard');
+    }else{
+
         header('location: ../login?error=password incorrect');
     }
+}
     
     
 } else {

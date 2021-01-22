@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <?php
- include_once('./models/TransactionsModel.php');
+/* include_once('./models/TransactionsModel.php');
  include_once('./models/UsersModel.php');
 include_once('./models/ManagersModel.php');
 
@@ -68,8 +68,10 @@ if(!empty($username)&&!empty($password)){
         }
     }
     header('location: dashboard');
+} */
+if (isset($_GET['error'])){
+$error = $_GET['error']; 
 }
-$error = $_GET['error'];
 ?>
 <html>
 

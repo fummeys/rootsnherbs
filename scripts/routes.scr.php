@@ -42,10 +42,15 @@ Routes::set('bonuses', function(){
 Routes::set('issuebv', function(){
     ControllerRoutes::RenderPage('issuebv');
 });
-Routes::set('/users.php', function(){
+Routes::set('users', function(){
     ControllerRoutes::RenderPage('users');
 });
-
+Routes::set('scripts/logout.scr', function(){
+    ControllerRoutes::RenderPage('logout.scr');
+});
+Routes::set('getname', function(){
+    ControllerRoutes::RenderPage('getname');
+});
 Routes::set('404', function(){
     ControllerRoutes::RenderPage('404');
 });
