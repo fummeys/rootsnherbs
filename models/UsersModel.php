@@ -19,7 +19,7 @@ class UsersModel {
 
             $statement_putTransactions = $conn->prepare($sql_putTransactions);
             echo $conn->error;
-            $statement_putTransactions->bind_param("sssiiii",$username,$name,$password,$sponsor,$parent, $phone, $bankaccount);
+            $statement_putTransactions->bind_param("sssiiss",$username,$name,$password,$sponsor,$parent, $phone, $bankaccount);
             if($statement_putTransactions->execute()==TRUE){
             
                 return TRUE;

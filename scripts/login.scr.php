@@ -1,8 +1,7 @@
 <?php
 
-// include_once('./models/TransactionsModel.php');
 include_once('../models/UsersModel.php');
-// include_once('./models/ManagersModel.php');
+
 include_once('./config.scr.php');
 
 
