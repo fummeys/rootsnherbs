@@ -73,7 +73,7 @@ include_once('./controllers/RanknBonusController.php');
                             <form class="user" method="POST" action="">
                                 <div class="form-group"><input class="form-control form-control-user" type="text" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Full Name" name="name" required></div>
                                 <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" placeholder="Username" id = "username" onblur= "checkusername()" name="username" required></div>
+                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" placeholder="Username" id = "username" onmouseout="disableRegister()" onblur= "checkusername()"  name="username" required></div>
                                     <div class="col-sm-6"><input class="form-control form-control-user" type="text" placeholder="Sponsor ID" name="sponsorid"></div>
                                 </div>
                                 <div class="form-group row">
@@ -83,13 +83,13 @@ include_once('./controllers/RanknBonusController.php');
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="password" id="password" placeholder="Password" name="password" onkeyup="checkpassword();" required></div>
                                     <div class="col-sm-6"><input class="form-control form-control-user" type="password" id="re-password" placeholder="Repeat Password" name="password_repeat" onkeyup="checkpassword();" required></div>
-                                </div><button id="submit-btn" class="btn btn-primary btn-block text-white btn-user" type="submit" disabled>Register Account</button>
+                                </div><button id="submit-btn" onmouseover="disableRegister()" class="btn btn-primary btn-block text-white btn-user" type="submit" disabled>Register Account</button>
                                 <hr>
                             </form>
                             <div class="col-sm-6 mb-3 mb-sm-0" style="display: contents;"><p> <span  id="txtHint"></span></p><p class="text-center" id="password-reply"></p></div>
                             <?php
                                     if(!empty($error)){
-                                    echo '<div class="text-center" style="color:red">'.$error.'</div>';
+                                    echo '<div id="error" class="text-center" style="color:red">'.$error.'</div>';
                                     }
                                    ?>
                             <div class="text-center"><a class="small" href="forgot-password">Forgot Password?</a></div>
@@ -114,10 +114,23 @@ include_once('./controllers/RanknBonusController.php');
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                 document.getElementById("txtHint").innerHTML = this.responseText;
+                disableRegister();
                 }
+
             };
             xhttp.open("GET", "getname?username="+username, true);
             xhttp.send();   
+        }
+        function disableRegister(){
+            let error = document.getElementById('error');
+            if (error) {
+                let button = document.getElementById('submit-btn');
+                if (error.style.color == 'red') {
+                    button.disabled = true;
+                } else if (error.style.color == 'green') {
+                    button.removeAttribute('disabled');
+                }
+            }
         }
         function checkpassword() {
             let pass = document.getElementById('password').value;
@@ -135,8 +148,6 @@ include_once('./controllers/RanknBonusController.php');
                 reply.innerHTML = 'password does not match';
                 reply.style.color = 'red';
             }
-            console.log(pass);
-            console.log(repass);
         }
     </script>
     <script src="assets/js/jquery.min.js"></script>

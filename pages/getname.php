@@ -11,9 +11,9 @@ if(isset($_GET['username'])){
     $managersmodel = new ManagersModel();
     $result1 = $managersmodel->getManagerbyID($checkname);
     if ($result->num_rows>0||$result1->num_rows>0){
-        echo "<p class='text-center' style='color:red'> Username ". $checkname . " is already taken </p>";
+        echo "<p class='text-center' id='error' style='color:red'> Username ". $checkname . " is already taken </p>";
     }else{
-        echo "<p class='text-center' style='color:green'> Username ". $checkname . " is free for use </p> ";
+        echo "<p class='text-center' id='error' style='color:green'> Username ". $checkname . " is free for use </p> ";
 
     }
 
