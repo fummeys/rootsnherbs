@@ -10,6 +10,7 @@ class UsersModel {
         $sql_getTransactions = "SELECT * FROM `users` WHERE `username` = ?";
         $statement_getTransactions = $conn->prepare($sql_getTransactions);
         $statement_getTransactions->bind_param("s", $username);
+        $statement_getTransactions->execute();
         $results = $statement_getTransactions->get_result();
 
         if ($results->num_rows > 0) {
@@ -89,7 +90,6 @@ class UsersModel {
     }
 
 
-     // this function updateUserbyID() will not work needs fix
     function updateUserbyID ($id,$username,$name,$password,$sponsor,$ancestors,$descendants,$bronzevalue,$rank, $phone, $bankaccount){
         global $conn;
         $sql_putTransactions =
@@ -110,13 +110,13 @@ class UsersModel {
     }
 
     // this function updateUserItembyID() will not work needs fix
-    function updateUserItembyID ($id,$type1,$type2,$type3,$title,$data){
+    function updateUserItembyID ($title,$type,$data,$id){
         global $conn;
         $sql_putTransactions =
         "UPDATE `users` SET `" . $title . "` =? WHERE `id` = ?";
         $statement_putTransactions = $conn->prepare($sql_putTransactions);
         echo $conn->error;
-        $statement_putTransactions->bind_param($type2.$type3,$data, $id);
+        $statement_putTransactions->bind_param($type,$data, $id);
         $statement_putTransactions->execute();
         echo $conn->error;
         if($statement_putTransactions->execute()==TRUE){
@@ -129,7 +129,7 @@ class UsersModel {
         $statement_putTransactions->close();
         $conn->close();
     }
-
+   
     function deleteUserbyID ($id){
         global $conn;
         $sql_putTransactions = "DELETE FROM `users` WHERE `id` = ''";

@@ -38,7 +38,7 @@ class RanknBonusController{
         }
         return $z;
     }
-    function grade($userid,$thisbv){
+    function grade($userid){
             $play1 = new UsersModel();
             $allusers = $play1->getAllUsers();
             $tree = new BlueM\Tree($allusers);
@@ -105,8 +105,8 @@ class RanknBonusController{
     }
 
     // save/update level in users table
-    if($item->get('rank')!=$level){
-    $play1->updateUserItembyID ($item->get('id'),'s','s','i','rank',$level);
+    if(strtoupper($item->get('rank'))!=strtoupper($level)){ 
+    $play1->updateUserItembyID ('rank','si',$level,$item->get('id'));
     $ranker = new RanksModel();
     $ranker->addRank($item->get('name'), $item->get('id') ,$item->get('rank') , $level);      
     }
@@ -118,15 +118,46 @@ class RanknBonusController{
             $eligible4pension = array('SAPPHIRE','RUBY','SILVER','DIAMOND','GOLD','GENERAL','ONE STAR GENERAL','TWO STAR GENERAL','THREE STAR GENERAL');
             $bonusmaker = new BonusesModel();
             $transactionid = $transactionid->fetch_assoc()['LAST_INSERT_ID()'];
-            if(in_array($father->get('rank'),$eligible4pension)){
+            $play1 = new UserModel();
+            if(in_array($person->get('rank'),$eligible4pension)){
             $amount -= 0.07*$amount; 
             $penamount  = 0.05*$amount + (0.05*$amount* 0.2);
-            $bonusmaker->addBonus($person->get('name'),$person->get('userid'),$amount, $transactionid,$description,'Pension deducted');
-            $bonusmaker->addBonus($person->get('name'),$person->get('userid'),$penamount, $transactionid,$description,'Pension');
+            $bonusmaker->addBonus($person->get('name'),$person->get('id'),$amount, $transactionid,$description,'Pension deducted');
+            $bonusmaker->addBonus($person->get('name'),$person->get('id'),$penamount, $transactionid,$description,'Pension');
+            
+            $play1->updateUserItembyID ('bonusvalue','si',$person->get('bonusvalue')+$amount+$penamount,$person->get('id'));
+            }else{
+                $amount -= 0.02*$amount;
+            $bonusmaker->addBonus($person->get('name'),$person->get('id'),$amount, $transactionid,$description,'Pension not deducted');
+            $play1->updateUserItembyID ('bonusvalue','si',$person->get('bonusvalue')+$amount,$person->get('id'));
+               
+            }
+        }
+
+        function payregistration($sponsor, $amount, $description){
+            $play1 = new UsersModel();
+            $allusers = $play1->getAllUsers();
+            $tree = new BlueM\Tree($allusers);
+            $person = $tree->getNodeById($sponsor);
+            $eligible4pension = array('SAPPHIRE','RUBY','SILVER','DIAMOND','GOLD','GENERAL','ONE STAR GENERAL','TWO STAR GENERAL','THREE STAR GENERAL');
+            $bonusmaker = new BonusesModel();
+            $transactionid = 12;
+            if(in_array($person->get('rank'),$eligible4pension)){
+            $amount -= 0.07*$amount; 
+            $penamount  = 0.05*$amount + (0.05*$amount* 0.2);
+            $bonusmaker->addBonus($person->get('name'),$person->get('id'),$amount, $transactionid,$description,'Pension deducted bonus');
+            $bonusmaker->addBonus($person->get('name'),$person->get('id'),$penamount, $transactionid,$description,'Pension from registration bonus');
+            $play1->updateUserItembyID ('bonusvalue','si',$person->get('bonusvalue')+$amount+$penamount,$person->get('id'));
 
             }else{
                 $amount -= 0.02*$amount;
-            $bonusmaker->addBonus($person->get('name'),$person->get('userid'),$amount, $transactionid,$description,'Not eligible for Pension');
+                
+            if($bonusmaker->addBonus($person->get('name'),$sponsor,$amount, $transactionid,$description,'Not eligible for Pension')){
+                $play1->updateUserItembyID ('bonusvalue','si',$person->get('bonusvalue')+$amount,$person->get('id'));
+                // echo 'done';
+            }else{
+                //echo 'couldnt do it';
+            }
                 
             }
         }

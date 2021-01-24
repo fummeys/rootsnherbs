@@ -1,6 +1,8 @@
 
 <?php
 include_once('./models/UsersModel.php');
+include_once('./controllers/RanknBonusController.php');
+
 
     if(isset($_POST['name'])){
     $name = $_POST['name'];
@@ -20,7 +22,7 @@ include_once('./models/UsersModel.php');
     if(isset($_POST['password'])){
     $password = $_POST['password'];
     }
-    if(!empty($username)&&!empty($password)&&!empty($name)&&!empty($phone)&&!empty($sponsor)&&!empty($bankaccount)){
+    if(!empty($username)&&!empty($password)&&!empty($name)){
         
         $hashedpassword = password_hash( $password, PASSWORD_BCRYPT );
         $play = new UsersModel();
@@ -29,7 +31,11 @@ include_once('./models/UsersModel.php');
         $bronzevalue = 0;
         $rank = "none";
         if($play->addUser($username,$name,$hashedpassword,$sponsor,$ancestors,$descendants,$bronzevalue,$rank, $phone, $bankaccount)==TRUE){
-            
+            if(!empty($sponsor)){
+                
+                $payer = new RanknBonusController();
+                $payer->payregistration($sponsor, 2000, $name.'\'s Registration');
+            }
             header('location: login');
         }else{
             $error = " Something went wrong, could not create user";
@@ -75,8 +81,8 @@ include_once('./models/UsersModel.php');
                                     <div class="col-sm-6"><input class="form-control form-control-user" type="text" placeholder="Account Number" name="accountnumber" required></div>
                                 </div>
                                 <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="password" id="password" placeholder="Password" name="password" onmouseout="checkpassword();" required></div>
-                                    <div class="col-sm-6"><input class="form-control form-control-user" type="password" id="re-password" placeholder="Repeat Password" name="password_repeat" onmouseout="checkpassword();" required></div>
+                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="password" id="password" placeholder="Password" name="password" onkeyup="checkpassword();" required></div>
+                                    <div class="col-sm-6"><input class="form-control form-control-user" type="password" id="re-password" placeholder="Repeat Password" name="password_repeat" onkeyup="checkpassword();" required></div>
                                 </div><button id="submit-btn" class="btn btn-primary btn-block text-white btn-user" type="submit" disabled>Register Account</button>
                                 <hr>
                             </form>

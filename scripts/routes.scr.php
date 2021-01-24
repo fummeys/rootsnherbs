@@ -45,11 +45,14 @@ Routes::set('issuebv', function(){
 Routes::set('users', function(){
     ControllerRoutes::RenderPage('users');
 });
-Routes::set('scripts/logout.scr', function(){
+Routes::set('./scripts/logout.scr', function(){
     ControllerRoutes::RenderPage('logout.scr');
 });
 Routes::set('getname', function(){
     ControllerRoutes::RenderPage('getname');
+});
+Routes::set('nopermission', function(){
+    ControllerRoutes::RenderPage('nopermission');
 });
 Routes::set('404', function(){
     ControllerRoutes::RenderPage('404');

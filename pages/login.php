@@ -69,6 +69,9 @@ if(!empty($username)&&!empty($password)){
     }
     header('location: dashboard');
 } */
+if(isset($_SESSION["user"])){
+    header('location: profile');
+}
 if (isset($_GET['error'])){
 $error = $_GET['error']; 
 }

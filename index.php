@@ -2,7 +2,11 @@
 session_start();
 //request uri
     // $uri = $_SERVER["REQUEST_URI"];
+    if(isset($_GET['url'])){
     $uri = $_GET['url'];
+    }else{
+        $uri = '';
+    }
 
 include_once('./scripts/config.scr.php');
 include_once('./classes/ClassRoutes.php');

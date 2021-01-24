@@ -2,5 +2,7 @@
 session_start();
 unset($_SESSION["id"]);
 unset($_SESSION["name"]);
-header("Location:login.php");
+unset($_SESSION["user"]);
+unset($_SESSION["level"]);
+header("Location: ../login");
 ?>
