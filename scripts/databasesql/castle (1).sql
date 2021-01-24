@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `bonuses` (
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `Bonuses link to transaction` (`transactionid`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `bonuses`
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `managers` (
   `description` varchar(100) NOT NULL,
   `time_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `managers`
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `description` varchar(100) NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `products`
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `ranks` (
   `newrank` varchar(50) NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `ranks`
@@ -203,7 +203,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   PRIMARY KEY (`id`),
   KEY `BV transaction link to manager` (`issuer`),
   KEY `BV transactions link to users` (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `transactions`
@@ -302,19 +302,19 @@ CREATE TABLE IF NOT EXISTS `users` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
   `name` varchar(150) NOT NULL,
-  `password` varchar(70) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `password` varchar(70) CHARACTER SET utf8mb4  NOT NULL,
   `parent` bigint NOT NULL,
   `sponsor` bigint NOT NULL,
-  `ancestors` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `descendants` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
+  `ancestors` varchar(100) CHARACTER SET utf8mb4  DEFAULT NULL,
+  `descendants` varchar(200) CHARACTER SET utf8mb4  DEFAULT NULL,
   `bronzevalue` int NOT NULL DEFAULT '0',
   `bonusvalue` int NOT NULL DEFAULT '0',
-  `rank` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT 'none',
-  `phone` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0000000000',
-  `bankaccount` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0000000000',
+  `rank` varchar(50) CHARACTER SET utf8mb4  NOT NULL DEFAULT 'none',
+  `phone` varchar(20) CHARACTER SET utf8mb4  NOT NULL DEFAULT '0000000000',
+  `bankaccount` varchar(20) CHARACTER SET utf8mb4  NOT NULL DEFAULT '0000000000',
   `dateregistered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 ;
 
 --
 -- Dumping data for table `users`
